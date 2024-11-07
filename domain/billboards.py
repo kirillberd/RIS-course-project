@@ -11,8 +11,7 @@ class Billboard(BaseModel):
     quality_indicator: int
     city: str
     direction: str
-    billboard_owner_id: int
-
+    billboard_owner_id: Optional[int]
 
 
 class BillboardOwner(BaseModel):
@@ -35,4 +34,13 @@ class Order(BaseModel):
     id: Optional[int]
     registration_date: datetime
     total_cost: float
+    tenant_id: Optional[int]
+
+class OrderLine(BaseModel):
+    id: Optional[int]
+    date_begin: datetime
+    date_end: datetime
+    cost: float
+    order_id: int
+    billboard_id: int
     

@@ -1,5 +1,5 @@
 from flask import Flask
-from infrastructure.app.setup import setup
+from infrastructure.api.setup import setup
 from infrastructure.container import Container
 import logging
 import sys

@@ -1,0 +1,65 @@
+.
+├── README.md
+├── __pycache__
+├── docker-compose.mysql.yml
+├── init_dotenv.py
+├── pdm.lock
+├── pyproject.toml
+├── src
+│   ├── app.py
+│   ├── application
+│   │   └── billboard_service.py
+│   ├── domain
+│   │   ├── __pycache__
+│   │   │   └── billboards.cpython-310.pyc
+│   │   └── billboards.py
+│   └── infrastructure
+│       ├── __pycache__
+│       │   └── container.cpython-310.pyc
+│       ├── app
+│       │   ├── __pycache__
+│       │   │   └── setup.cpython-310.pyc
+│       │   ├── base_templates
+│       │   │   ├── base_template.html
+│       │   │   └── static
+│       │   │       └── base_style.css
+│       │   ├── blueprints
+│       │   │   ├── auth
+│       │   │   │   ├── __pycache__
+│       │   │   │   │   └── auth.cpython-310.pyc
+│       │   │   │   ├── auth.py
+│       │   │   │   └── templates
+│       │   │   │       └── auth_template.html
+│       │   │   ├── main
+│       │   │   │   ├── __pycache__
+│       │   │   │   │   └── main.cpython-310.pyc
+│       │   │   │   ├── main.py
+│       │   │   │   └── templates
+│       │   │   │       └── main_menu_template.html
+│       │   │   └── queries
+│       │   │       ├── __pycache__
+│       │   │       │   └── queries.cpython-310.pyc
+│       │   │       ├── queries.py
+│       │   │       └── templates
+│       │   │           └── query_menu_template.html
+│       │   └── setup.py
+│       ├── configs
+│       │   ├── __pycache__
+│       │   │   └── mysql_cm_config.cpython-310.pyc
+│       │   └── mysql_cm_config.py
+│       ├── container.py
+│       ├── context
+│       │   ├── __pycache__
+│       │   │   └── mysql_context_manager.cpython-310.pyc
+│       │   └── mysql_context_manager.py
+│       ├── providers
+│       ├── repositories
+│       │   ├── __pycache__
+│       │   │   └── billboard_repository.cpython-310.pyc
+│       │   └── billboard_repository.py
+│       └── sql
+│           └── billboard_repo_sql
+│               └── create_billboard.sql
+└── tree.txt
+
+31 directories, 32 files

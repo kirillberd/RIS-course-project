@@ -1,22 +1,24 @@
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
+from typing import Optional
 
 class BaseUser(BaseModel):
-    id: int
-    email: int
-    password: int
-    username: int
+    password: str
+    username: str
+    firstname: str
+    lastname: str
+    phone: str
+    role: str
+    id: Optional[int] = None
 
 
 class Customer(BaseUser):
-    role = "customer"
+    role: str = Field(default="customer")
 
 
 class BillboardOwner(BaseUser):
-    role = "billboard-owner"
+    role: str = Field(default="owner")
 
 class Analyst(BaseUser):
-    role = "analyst"
-
+    role: str = Field(default="analyst")
     
 

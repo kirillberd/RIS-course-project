@@ -13,7 +13,7 @@ def init_config(container: Container):
 
 def setup(app: Flask, container: Container):
     init_config(container)
-    container.wire(modules=[queries])
+    container.wire(modules=[queries, auth])
     app.register_blueprint(main.main_blueprint, url_prefix="/")
     app.register_blueprint(queries.query_blueprint, url_prefix="/queries")
     app.register_blueprint(auth.auth_blueprint, url_prefix="/auth")

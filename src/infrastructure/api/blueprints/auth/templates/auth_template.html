@@ -9,7 +9,7 @@
 
     <div class="auth-form" id="login-form">
         <h2>Вход в систему</h2>
-        <form method="POST" action="/login">
+        <form method="POST" action="/auth/login">
             <div class="form-group">
                 <label for="login-username">Имя пользователя</label>
                 <input type="text" id="login-username" name="username" required>
@@ -24,24 +24,49 @@
 
     <div class="auth-form hidden" id="register-form">
         <h2>Регистрация</h2>
-        <form method="POST" action="/register">
+        <form method="POST" action="/auth/register" id="register-form-element" onsubmit="return handleRegisterSubmit(event)">
+            <div class="form-group">
+                <label for="register-firstname">Имя</label>
+                <input type="text" id="register-firstname" name="firstname" required pattern="[А-Яа-яЁё\s-]+" 
+                       oninput="validateName(this)" title="Используйте только русские буквы, дефис и пробел">
+                <span id="firstname-message" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="register-lastname">Фамилия</label>
+                <input type="text" id="register-lastname" name="lastname" required pattern="[А-Яа-яЁё\s-]+" 
+                       oninput="validateName(this)" title="Используйте только русские буквы, дефис и пробел">
+                <span id="lastname-message" class="validation-message"></span>
+            </div>
             <div class="form-group">
                 <label for="register-username">Имя пользователя</label>
                 <input type="text" id="register-username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="register-email">Email</label>
-                <input type="email" id="register-email" name="email" required>
+                <label for="register-phone">Номер телефона</label>
+                <input type="tel" id="register-phone" name="phone" required
+                       pattern="\+7\s?[\(]{0,1}9[0-9]{2}[\)]{0,1}\s?\d{3}[-]{0,1}\d{2}[-]{0,1}\d{2}"
+                       placeholder="+7 (9XX) XXX-XX-XX"
+                       oninput="validatePhone(this)">
+                <span id="phone-message" class="validation-message"></span>
             </div>
             <div class="form-group">
                 <label for="register-password1">Пароль</label>
-                <input type="password" id="register-password1" name="password1" required>
+                <input type="password" id="register-password1" name="password" required 
+                       oninput="validatePasswordMatch()">
             </div>
             <div class="form-group">
                 <label for="register-password2">Подтверждение пароля</label>
-                <input type="password" id="register-password2" name="password2" required>
+                <input type="password" id="register-password2" required 
+                       oninput="validatePasswordMatch()">
+                <span id="password-match-message" class="password-message"></span>
             </div>
-            <button type="submit" class="form-submit">Зарегистрироваться</button>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_owner" id="register-is-owner">
+                    <span class="checkbox-text">Я владелец билбордов</span>
+                </label>
+            </div>
+            <button type="submit" class="form-submit" id="register-submit">Зарегистрироваться</button>
         </form>
     </div>
 </div>
@@ -55,13 +80,104 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', () => {
             navButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             forms.forEach(form => form.classList.add('hidden'));
-
             const formToShow = document.getElementById(`${button.dataset.form}-form`);
             formToShow.classList.remove('hidden');
         });
     });
 });
+
+function validatePhone(input) {
+    const phone = input.value.replace(/\D/g, '');
+    const message = document.getElementById('phone-message');
+    
+    if (phone.length > 0 && phone.length < 11) {
+        message.textContent = 'Номер телефона должен содержать 11 цифр';
+        message.className = 'validation-message error';
+        input.setCustomValidity('Неверный формат номера');
+    } else if (phone.length === 11) {
+        if (phone[0] !== '7' && phone[0] !== '8') {
+            message.textContent = 'Номер должен начинаться с +7';
+            message.className = 'validation-message error';
+            input.setCustomValidity('Неверный формат номера');
+        } else if (phone[1] !== '9') {
+            message.textContent = 'Номер должен начинаться с +7 9';
+            message.className = 'validation-message error';
+            input.setCustomValidity('Неверный формат номера');
+        } else {
+            message.textContent = '';
+            message.className = 'validation-message';
+            input.setCustomValidity('');
+            
+            let formattedPhone = '+7 (' + phone.slice(1, 4) + ') ' + 
+                                phone.slice(4, 7) + '-' + 
+                                phone.slice(7, 9) + '-' + 
+                                phone.slice(9);
+            input.value = formattedPhone;
+        }
+    } else {
+        message.textContent = '';
+        message.className = 'validation-message';
+        input.setCustomValidity('');
+    }
+}
+
+function validateName(input) {
+    const name = input.value;
+    const message = document.getElementById(input.id + '-message');
+    const regex = /^[А-Яа-яЁё\s-]+$/;
+
+    if (!regex.test(name) && name.length > 0) {
+        message.textContent = 'Используйте только русские буквы, дефис и пробел';
+        message.className = 'validation-message error';
+        input.setCustomValidity('Неверный формат');
+    } else {
+        message.textContent = '';
+        message.className = 'validation-message';
+        input.setCustomValidity('');
+    }
+}
+
+function validatePasswordMatch() {
+    const password1 = document.getElementById('register-password1');
+    const password2 = document.getElementById('register-password2');
+    const message = document.getElementById('password-match-message');
+    const submitButton = document.getElementById('register-submit');
+
+    if (password2.value) { 
+        if (password1.value === password2.value) {
+            message.textContent = '';
+            message.className = 'password-message match';
+            submitButton.disabled = false;
+        } else {
+            message.textContent = 'Пароли не совпадают';
+            message.className = 'password-message mismatch';
+            submitButton.disabled = true;
+        }
+    } else {
+        message.textContent = '';
+        submitButton.disabled = false;
+    }
+}
+
+function handleRegisterSubmit(event) {
+    event.preventDefault();
+    const password1 = document.getElementById('register-password1').value;
+    const password2 = document.getElementById('register-password2').value;
+    const phone = document.getElementById('register-phone');
+    
+    if (password1 !== password2) {
+        alert('Пароли не совпадают!');
+        return false;
+    }
+
+    if (phone.validity.valid) {
+        event.target.submit();
+        return true;
+    } else {
+        alert('Пожалуйста, проверьте правильность введенного номера телефона');
+        return false;
+    }
+}
 </script>
 {% endblock %}

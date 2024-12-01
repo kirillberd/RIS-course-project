@@ -2,6 +2,7 @@
 {% block content %}
 <link rel="stylesheet" href="static/auth.css">
 <div class="auth-container">
+
     <div class="auth-nav">
         <button class="auth-nav-btn active" data-form="login">Вход</button>
         <button class="auth-nav-btn" data-form="register">Регистрация</button>
@@ -69,6 +70,14 @@
             <button type="submit" class="form-submit" id="register-submit">Зарегистрироваться</button>
         </form>
     </div>
+    {% if error %}
+    <div class="auth-error-message">
+        <p>{{ error }}</p>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 <script>

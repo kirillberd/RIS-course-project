@@ -157,3 +157,17 @@ input::placeholder {
         min-width: 120px;
     }
 }
+
+.auth-error-message {
+    background-color: #fff8f8;
+    border: 1px solid #ffebee;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: #721c24;
+    text-align: center;
+}
+
+.auth-error-message p {
+    margin: 0.5rem 0;
+}

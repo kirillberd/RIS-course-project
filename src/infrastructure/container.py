@@ -4,6 +4,8 @@ from infrastructure.configs.mysql_cm_config import MysqlCMConfig
 from infrastructure.repositories.billboard_repository import BillboardRepository
 from infrastructure.repositories.user_repository import UserRepository
 from application.services.auth_service import AuthService
+from infrastructure.providers.sql_provider import SQLProvider
+from pathlib import Path
 
 class Container(DeclarativeContainer):
     config = providers.Configuration()
@@ -26,9 +28,15 @@ class Container(DeclarativeContainer):
         config = mysql_cm_config
     )
 
+    auth_sql_provider: SQLProvider = providers.Singleton(
+        SQLProvider,
+        Path(__file__).parent / "sql" / "auth"
+
+    )
     auth_service: AuthService = providers.Singleton(
         AuthService,
         user_repository = user_repo,
+        sql_provider = auth_sql_provider
     )
 
 

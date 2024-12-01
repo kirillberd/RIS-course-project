@@ -14,10 +14,12 @@ class UserRepository:
         self.config_dict = self.config.model_dump()
 
 
-    def add(self, user: BaseUser):
+    def add(self, user: BaseUser, query: str):
         with MysqlContextManager(self.config_dict) as cur:
             if cur is None:
                 raise Exception("Test")
             else:
-                module_logger.info(user)
+                result = cur.execute(query)
+                module_logger.info(result)
+        
     

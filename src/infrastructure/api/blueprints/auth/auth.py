@@ -21,6 +21,8 @@ def auth_error_handler(err):
 
 @auth_blueprint.route("/", methods=["GET"])
 def auth_main():
+    if session.get("username"):
+        return redirect("/")
     return render_template("auth_template.html")
 
 
@@ -56,4 +58,9 @@ def login_handler(auth_service: AuthService = Provide[Container.auth_service]):
     session["firstname"] = user.firstname
     session["lastname"] = user.lastname
 
+    return redirect("/")
+
+@auth_blueprint.route("/logout", methods=["GET"])
+def logout_handler():
+    session.clear()
     return redirect("/")

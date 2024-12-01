@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, jsonify
-from domain.user import Customer, BillboardOwner
+from flask import Blueprint, render_template, request, redirect, session
+from domain.user import Customer, BillboardOwner, UserLogin
 from dependency_injector.wiring import inject, Provide
 from infrastructure.container import Container
 from application.services.auth_service import AuthService
@@ -41,3 +41,19 @@ def register_handler(auth_service: AuthService = Provide[Container.auth_service]
 
     auth_service.register_user(user)
     return redirect("/auth/")
+
+@auth_blueprint.route("/login", methods=["POST"])
+@inject
+def login_handler(auth_service: AuthService = Provide[Container.auth_service]):
+    user_obj = {
+        "username": request.form.get("username"),
+        "password": request.form.get("password")
+    }
+    user_login = UserLogin.model_validate(user_obj)
+    user = auth_service.login(user_login)
+    session["username"] = user.username
+    session["role"] = user.role
+    session["firstname"] = user.firstname
+    session["lastname"] = user.lastname
+
+    return redirect("/")

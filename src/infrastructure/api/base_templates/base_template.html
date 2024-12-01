@@ -12,7 +12,14 @@
         <a href="/" class="navbar-logo">ИС Билборды</a>
         <ul class="navbar-links">
             <li><a href="/queries">Работа с запросами</a></li>
+            {% if session.get("username") %}
+            <li class="user-info">
+               <span>{{ session["firstname"] }} {{ session["lastname"] }}</span> 
+                <a href="/auth/logout">Выйти</a>
+            </li>
+            {% else %}
             <li><a href="/auth">Авторизация</a></li>
+            {% endif %}
         </ul>
        
     </nav>

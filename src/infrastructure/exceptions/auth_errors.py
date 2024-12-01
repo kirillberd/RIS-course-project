@@ -15,3 +15,14 @@ class UserAlreadyExistsError(AuthError):
         return f"UserAlreadyExistsErorr: {self.name}"
 
 
+class IncorrectPasswordError(AuthError):
+    def __init__(self, name, *args: object) -> None:
+        super().__init__(name, *args)
+    def __str__(self) -> str:
+        return f"IncorrectPasswordError: {self.name}"
+    
+class IncorrectUsernameError(AuthError):
+    def __init__(self, name, *args: object) -> None:
+        super().__init__(name, *args)
+    def __str__(self) -> str:
+        return f"IncorrectUsernameError: {self.name}"

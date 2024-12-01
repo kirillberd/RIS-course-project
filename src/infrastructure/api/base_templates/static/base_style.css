@@ -54,3 +54,27 @@ body {
     padding-top: 60px;
     text-align: center;
 }
+
+.user-info {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+}
+.logout-btn {
+    color: #fff;
+    background-color: #555;
+    border: none;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.logout-btn:hover {
+    background-color: #777;
+}
+.navbar-links .user-info span {
+    padding: 8px 12px;
+}

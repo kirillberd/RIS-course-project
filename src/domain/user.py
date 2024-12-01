@@ -20,5 +20,8 @@ class BillboardOwner(BaseUser):
 
 class Analyst(BaseUser):
     role: str = Field(default="analyst")
-    
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
 

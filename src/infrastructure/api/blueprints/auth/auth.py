@@ -1,12 +1,13 @@
-from flask import Blueprint
-from pathlib import Path
+from flask import Blueprint, render_template
+
 auth_blueprint = Blueprint(
     "auth_blueprint",
     __name__,
-    template_folder=Path(__name__).parent / "templates"
+    template_folder="templates",
+    static_folder="static"
 )
 
 
 @auth_blueprint.route("/", methods=["GET"])
 def auth_main():
-    return "Auth menu"
+    return render_template("auth_template.html")

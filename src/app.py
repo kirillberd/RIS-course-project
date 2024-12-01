@@ -7,7 +7,7 @@ import sys
 logger = logging.getLogger(__name__)
 
 def init():
-    logging.basicConfig(stream=sys.stdout, level=logging.ERROR)
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     app = Flask(__name__)
     container = Container()
     setup(app, container)

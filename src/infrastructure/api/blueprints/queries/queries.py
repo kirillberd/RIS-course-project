@@ -3,6 +3,10 @@ from domain.billboards import BillboardQuery
 from datetime import datetime
 from infrastructure.decorators.auth_required import auth_required
 from infrastructure.decorators.role_required import role_required
+from infrastructure.container import Container
+from dependency_injector.wiring import inject, Provide
+from application.services.billboard_service import BillboardService
+
 import logging
 
 module_logger = logging.getLogger(__name__)
@@ -22,7 +26,8 @@ def query_menu():
 @auth_required
 @role_required(role="customer")
 @query_blueprint.route("/search/", methods=["GET"])
-def search_handler():
+@inject
+def search_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
     query_params = {
         "city": request.args.get("city") if request.args.get("city") else None,
         "direction": (
@@ -68,3 +73,5 @@ def search_handler():
 
     module_logger.info(query_params)
     query_obj = BillboardQuery.model_validate(query_params)
+    billboard_service.get_billboards(query_obj)
+    return "Ok"

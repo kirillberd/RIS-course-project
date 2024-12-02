@@ -5,6 +5,7 @@ from infrastructure.repositories.billboard_repository import BillboardRepository
 from infrastructure.repositories.user_repository import UserRepository
 from application.services.auth_service import AuthService
 from infrastructure.providers.sql_provider import SQLProvider
+from application.services.billboard_service import BillboardService
 from pathlib import Path
 
 class Container(DeclarativeContainer):
@@ -21,6 +22,17 @@ class Container(DeclarativeContainer):
     billboard_repo: BillboardRepository = providers.Singleton(
         BillboardRepository,
         config = mysql_cm_config
+    )
+
+    billboard_sql_provider: SQLProvider = providers.Singleton(
+        SQLProvider,
+        Path(__file__).parent / "sql" / "billboards"
+    )
+
+    billboard_service: BillboardService = providers.Singleton(
+        BillboardService,
+        sql_provider = billboard_sql_provider,
+        billboard_repository = billboard_repo
     )
 
     user_repo: UserRepository = providers.Singleton(

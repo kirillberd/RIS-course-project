@@ -11,7 +11,8 @@ class BillboardService:
 
     def get_billboards(self, query_obj: BillboardQuery):
         conditions_dict = self._make_query_conditions(query_obj)
-
+        query = self.sql_provider.get("get_billboards.sql", **conditions_dict)
+        self.billboard_repository.get(query)
 
     def _make_query_conditions(self, query_obj: BillboardQuery) -> dict:
         conditions = {}

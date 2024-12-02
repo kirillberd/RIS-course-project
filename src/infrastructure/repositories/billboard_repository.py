@@ -4,7 +4,7 @@ import logging
 from infrastructure.configs.mysql_cm_config import MysqlCMConfig
 from infrastructure.context.mysql_context_manager import MysqlContextManager
 
-logger = logging.getLogger(__name__)
+module_logger = logging.getLogger(__name__)
 
 @dataclass
 class BillboardRepository:
@@ -19,4 +19,11 @@ class BillboardRepository:
             if cur is None:
                 raise Exception("Test")
             else:
-                logger.info(billboard)
+                module_logger.info(billboard)
+    def get(self, query):
+        with MysqlContextManager(self.config_dict) as cur:
+            if cur is None:
+                raise Exception("Test")
+            else:
+                module_logger.info(query)
+                

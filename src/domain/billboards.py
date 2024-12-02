@@ -3,15 +3,15 @@ from typing import Optional
 from datetime import datetime
 
 class Billboard(BaseModel):
-    id: Optional[int]
     cost: float
     size: float
     addres: str
     quality_indicator: int
     city: str
     direction: str
-    billboard_owner_id: Optional[int] = None
-    installation_date: Optional[datetime] = None
+    installation_date: datetime
+    billboard_owner_id: int
+    id: Optional[int] = None
 
 
 class Order(BaseModel):

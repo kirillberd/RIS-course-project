@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from infrastructure.repositories.billboard_repository import BillboardRepository
 from infrastructure.providers.sql_provider import SQLProvider
-from domain.billboards import BillboardQuery
+from domain.billboards import BillboardQuery, Billboard
 
 @dataclass
 class BillboardService:
@@ -13,6 +13,11 @@ class BillboardService:
         conditions_dict = self._make_query_conditions(query_obj)
         query = self.sql_provider.get("get_billboards.sql", **conditions_dict)
         return self.billboard_repository.get(query)
+    
+    def add_billboard(self, billboard: Billboard):
+        query = self.sql_provider.get("add_billboard.sql", **billboard.model_dump())
+        self.billboard_repository.add(query)
+        
 
     def _make_query_conditions(self, query_obj: BillboardQuery) -> dict:
         conditions = {}

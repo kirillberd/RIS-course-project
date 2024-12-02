@@ -15,12 +15,14 @@ class BillboardRepository:
     def __post_init__(self):
         self.config_dict = self.config.model_dump()
 
-    def add(self, billboard: Billboard):
+    def add(self, query):
         with MysqlContextManager(self.config_dict) as cur:
             if cur is None:
                 raise Exception("Test")
             else:
-                module_logger.info(billboard)
+                result = cur.execute(query)
+                module_logger.info(result)
+                
     def get(self, query) -> List[Billboard]:
         with MysqlContextManager(self.config_dict) as cur:
             if cur is None:

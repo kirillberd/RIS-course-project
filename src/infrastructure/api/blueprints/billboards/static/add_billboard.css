@@ -176,3 +176,14 @@
         width: 100%;
     }
 }
+
+.message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 6px;
+    text-align: center;
+    animation: slideDown 0.5s ease-out;
+}

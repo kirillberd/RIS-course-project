@@ -1,6 +1,6 @@
 {% extends 'base_template.html' %}
 {% block content %}
-<link rel="stylesheet" href="static/query.css">
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query.css') }}">
 
 <div class="query-container">
     <h2>Поиск рекламных щитов</h2>

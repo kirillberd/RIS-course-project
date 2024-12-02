@@ -1,0 +1,74 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='billboards.css') }}">
+
+<div class="billboards-container">
+    <div class="header-actions">
+        <a href="{{ url_for('query_blueprint.query_menu') }}" class="back-button">
+            ← Вернуться к поиску
+        </a>
+    </div>
+<div class="billboards-container">
+    <h2 class="billboards-title">Результаты поиска</h2>
+    
+    {% if billboards %}
+    <div class="billboards-count">Найдено билбордов: {{ billboards|length }}</div>
+    
+    <div class="billboards-grid">
+        {% for billboard in billboards %}
+        <div class="billboard-card">
+            <div class="billboard-header">
+                <h3>Билборд №{{ billboard.id }}</h3>
+                <div class="quality-indicator">
+                    Качество: 
+                    {% for i in range(billboard.quality_indicator) %}
+                    <span class="star">★</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="billboard-info">
+                <div class="info-row">
+                    <span class="label">Город:</span>
+                    <span class="value">{{ billboard.city }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Адрес:</span>
+                    <span class="value">{{ billboard.addres }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Направление:</span>
+                    <span class="value">{{ billboard.direction }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Размер:</span>
+                    <span class="value">{{ billboard.size }} м²</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Стоимость:</span>
+                    <span class="value">{{ "{:,.2f}".format(billboard.cost) }} ₽</span>
+                </div>
+                {% if billboard.installation_date %}
+                <div class="info-row">
+                    <span class="label">Дата установки:</span>
+                    <span class="value">{{ billboard.installation_date.strftime('%d.%m.%Y') }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="billboard-actions">
+                <button class="action-btn">Арендовать</button>
+                <button class="action-btn details">Подробнее</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <div class="no-results">
+        <p>По вашему запросу ничего не найдено</p>
+        <button onclick="history.back()" class="back-btn">Вернуться к поиску</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

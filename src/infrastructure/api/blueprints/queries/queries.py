@@ -73,5 +73,7 @@ def search_handler(billboard_service: BillboardService = Provide[Container.billb
 
     module_logger.info(query_params)
     query_obj = BillboardQuery.model_validate(query_params)
-    billboard_service.get_billboards(query_obj)
-    return "Ok"
+    result = billboard_service.get_billboards(query_obj)
+    module_logger.info(result)
+    return render_template("billboards.html", billboards=result)
+

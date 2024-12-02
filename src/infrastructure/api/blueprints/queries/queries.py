@@ -25,7 +25,6 @@ def query_menu():
 
 @query_blueprint.route("/search/", methods=["GET"])
 @auth_required
-@role_required(role="customer")
 @inject
 def search_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
     query_params = {

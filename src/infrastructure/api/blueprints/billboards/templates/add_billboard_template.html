@@ -1,0 +1,70 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='add_billboard.css') }}">
+
+<div class="billboard-add-container">
+    <div class="header-actions">
+        <a href="/" class="back-button">
+            ← Вернуться в главное меню
+        </a>
+    </div>
+
+    <h2>Добавление нового билборда</h2>
+    <form method="POST" action="/billboards/add" class="add-form">
+        <div class="form-grid">
+            <div class="form-section">
+                <h3>Расположение</h3>
+                <div class="form-group">
+                    <label for="city">Город*</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес*</label>
+                    <input type="text" id="address" name="addres" required>
+                </div>
+                <div class="form-group">
+                    <label for="direction">Направление*</label>
+                    <input type="text" id="direction" name="direction" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Характеристики</h3>
+                <div class="form-group">
+                    <label for="size">Размер (м²)*</label>
+                    <input type="number" id="size" name="size" step="0.1" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="quality">Показатель качества*</label>
+                    <select id="quality" name="quality_indicator" required>
+                        <option value="">Выберите показатель</option>
+                        <option value="1">1 - Низкое</option>
+                        <option value="2">2 - Ниже среднего</option>
+                        <option value="3">3 - Среднее</option>
+                        <option value="4">4 - Хорошее</option>
+                        <option value="5">5 - Отличное</option>
+                    </select>
+                </div>
+            </div>
+
+ 
+            <div class="form-section">
+                <h3>Стоимость и даты</h3>
+                <div class="form-group">
+                    <label for="cost">Стоимость (₽)*</label>
+                    <input type="number" id="cost" name="cost" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="installation_date">Дата установки</label>
+                    <input type="date" id="installation_date" name="installation_date">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Добавить билборд</button>
+            <button type="reset" class="reset-btn">Очистить форму</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

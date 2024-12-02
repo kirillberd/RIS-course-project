@@ -55,11 +55,12 @@
                 </div>
                 {% endif %}
             </div>
-            
+            {% if session.get("role") == "customer" %}
             <div class="billboard-actions">
                 <button class="action-btn">Арендовать</button>
                 <button class="action-btn details">Подробнее</button>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

@@ -58,6 +58,7 @@ def login_handler(auth_service: AuthService = Provide[Container.auth_service]):
     session["role"] = user.role
     session["firstname"] = user.firstname
     session["lastname"] = user.lastname
+    session["id"] = user.id
 
     return redirect("/")
 

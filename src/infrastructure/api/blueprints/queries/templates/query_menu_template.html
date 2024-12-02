@@ -1,4 +1,82 @@
 {% extends 'base_template.html' %}
 {% block content %}
-<p> Query Menu </p>
+<link rel="stylesheet" href="static/query.css">
+
+<div class="query-container">
+    <h2>Поиск рекламных щитов</h2>
+    
+    <form method="GET" action="/queries/search" class="query-form">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="city">Город</label>
+                <input type="text" id="city" name="city" placeholder="Введите город">
+            </div>
+            
+            <div class="form-group">
+                <label for="direction">Направление</label>
+                <input type="text" id="direction" name="direction" placeholder="Укажите направление">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="cost-min">Стоимость от</label>
+                <input type="number" id="cost-min" name="cost_min" min="0" step="1000" placeholder="Минимальная цена">
+            </div>
+            
+            <div class="form-group">
+                <label for="cost-max">Стоимость до</label>
+                <input type="number" id="cost-max" name="cost_max" min="0" step="1000" placeholder="Максимальная цена">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="size-min">Размер от (м²)</label>
+                <input type="number" id="size-min" name="size_min" min="0" step="0.5" placeholder="Минимальный размер">
+            </div>
+            
+            <div class="form-group">
+                <label for="size-max">Размер до (м²)</label>
+                <input type="number" id="size-max" name="size_max" min="0" step="0.5" placeholder="Максимальный размер">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="quality">Минимальный показатель качества</label>
+                <select id="quality" name="min_quality">
+                    <option value="">Любой</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Адрес</label>
+                <input type="text" id="address" name="address" placeholder="Введите адрес">
+            </div>
+        </div>
+
+        <div class="date-range">
+            <label>Период установки:</label>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="date" id="date-from" name="date_from">
+                </div>
+                <div class="form-group">
+                    <input type="date" id="date-to" name="date_to">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-search">Найти</button>
+            <button type="reset" class="btn-reset">Сбросить</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

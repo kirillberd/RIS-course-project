@@ -5,6 +5,7 @@ from infrastructure.container import Container
 from application.services.auth_service import AuthService
 from infrastructure.exceptions.auth_errors import AuthError
 
+
 import logging
 
 

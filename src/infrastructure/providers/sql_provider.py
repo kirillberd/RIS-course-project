@@ -24,3 +24,4 @@ class SQLProvider:
             raise KeyError(f"SQL file {file_name} not found in {self.sql_path}")
             
         return self.scripts[file_name].substitute(**kwargs)
+    

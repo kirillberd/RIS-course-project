@@ -14,6 +14,9 @@
             {% if session.get("username") %}
             <li><a href="/billboards">Найти билборды</a></li>
             {% endif %}
+            {% if session.get("role") == "analyst" %}
+            <li><a href="/queries">Работа с запросами</a></li>
+            {% endif %}
             {% if session.get("role") == "owner" %}
             <li><a href="/billboards/add">Разместить билборд</a></li>
             {% endif %}

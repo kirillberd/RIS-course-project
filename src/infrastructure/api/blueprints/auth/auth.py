@@ -53,7 +53,10 @@ def login_handler(auth_service: AuthService = Provide[Container.auth_service]):
         "password": request.form.get("password")
     }
     user_login = UserLogin.model_validate(user_obj)
-    user = auth_service.login(user_login)
+    if request.form.get("is_admin"):
+        user = auth_service.login_as_admin(user_login)
+    else:
+        user = auth_service.login(user_login)
     session["username"] = user.username
     session["role"] = user.role
     session["firstname"] = user.firstname

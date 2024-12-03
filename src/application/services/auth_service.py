@@ -43,6 +43,19 @@ class AuthService:
         else:
             raise IncorrectPasswordError("Неверный пароль.")
        
+    def login_as_admin(self, user_login: UserLogin) -> BaseUser:
+        try:
+            query = self.sql_provider.get("get_internal_user.sql", username=user_login.username)
+            user = self.user_repository.get(query)
+        except Exception as e:
+            module_logger.error(e)
+            raise IncorrectUsernameError(
+                    "Пользователя с даннным именем не существует. Пройдите регистрацию или попробуйте другое имя."
+                )
+        if user_login.password == user.password:
+            return user
+        else:
+            raise IncorrectPasswordError("Неверный пароль.")   
 
     def _hash_user_password(self, password: str):
         salt = bcrypt.gensalt()

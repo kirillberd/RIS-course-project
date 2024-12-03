@@ -4,8 +4,6 @@ SELECT
     username,
     firstname,
     lastname,
-    phone,
     role
-FROM external_users 
+FROM internal_users
 WHERE username = '$username';
-

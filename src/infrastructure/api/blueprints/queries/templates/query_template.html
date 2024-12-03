@@ -1,0 +1,66 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}">
+
+<div class="query-container">
+   <div class="query-nav">
+       <button class="query-nav-btn active" data-form="users">Пользователи</button>
+       <button class="query-nav-btn" data-form="billboards">Билборды</button>
+       <button class="query-nav-btn" data-form="statistics">Статистика</button>
+   </div>
+
+   <div class="query-form" id="users-form">
+       <h2>Информация о пользователях</h2>
+       <div class="users-grid">
+           {% for user in users %}
+           <div class="user-card">
+               <div class="user-info">
+                   <div class="user-header">
+                       <h3>{{ user.firstname }} {{ user.lastname }}</h3>
+                       <span class="user-role">{{ user.role }}</span>
+                   </div>
+                   <div class="info-row">
+                       <span class="label">Логин:</span>
+                       <span class="value">{{ user.username }}</span>
+                   </div>
+                   <div class="info-row">
+                       <span class="label">Телефон:</span>
+                       <span class="value">{{ user.phone }}</span>
+                   </div>
+                   {% if user.role == 'owner' %}
+                   <div class="billboard-count">
+                       <span>Количество билбордов: {{ user.billboard_count }}</span>
+                   </div>
+                   {% endif %}
+               </div>
+           </div>
+           {% endfor %}
+       </div>
+   </div>
+
+   <div class="query-form hidden" id="billboards-form">
+       <!-- Здесь будет форма для билбордов -->
+   </div>
+
+   <div class="query-form hidden" id="statistics-form">
+       <!-- Здесь будет форма для статистики -->
+   </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+   const navButtons = document.querySelectorAll('.query-nav-btn');
+   const forms = document.querySelectorAll('.query-form');
+
+   navButtons.forEach(button => {
+       button.addEventListener('click', () => {
+           navButtons.forEach(btn => btn.classList.remove('active'));
+           button.classList.add('active');
+           forms.forEach(form => form.classList.add('hidden'));
+           const formToShow = document.getElementById(`${button.dataset.form}-form`);
+           formToShow.classList.remove('hidden');
+       });
+   });
+});
+</script>
+{% endblock %}

@@ -1,11 +1,11 @@
 {% extends 'base_template.html' %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='billboards.css') }}">
+<link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='billboards.css') }}">
 
 <div class="billboards-container">
     <div class="header-actions">
-        <a href="{{ url_for('query_blueprint.query_menu') }}" class="back-button">
-            ← Вернуться к поиску
+        <a href="/" class="back-button">
+            ← Вернуться в меню
         </a>
     </div>
 <div class="billboards-container">

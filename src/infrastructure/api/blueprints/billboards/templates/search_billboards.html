@@ -1,11 +1,11 @@
 {% extends 'base_template.html' %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query.css') }}">
+<link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='query.css') }}">
 
 <div class="query-container">
     <h2>Поиск билбордов</h2>
     
-    <form method="GET" action="/queries/search" class="query-form">
+    <form method="GET" action="/billboards/search" class="query-form">
         <div class="form-row">
             <div class="form-group">
                 <label for="city">Город</label>

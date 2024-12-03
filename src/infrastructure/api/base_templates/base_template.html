@@ -11,7 +11,9 @@
     <nav class="navbar">
         <a href="/" class="navbar-logo">ИС Билборды</a>
         <ul class="navbar-links">
+            {% if session.get("username") %}
             <li><a href="/billboards">Найти билборды</a></li>
+            {% endif %}
             {% if session.get("role") == "owner" %}
             <li><a href="/billboards/add">Разместить билборд</a></li>
             {% endif %}

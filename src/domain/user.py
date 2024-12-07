@@ -20,7 +20,7 @@ class BillboardOwner(BaseUser):
 
 class Analyst(BaseUser):
     role: str = Field(default="analyst")
-    phone: str = None
+    phone: Optional[str] = None
 
 class UserLogin(BaseModel):
     username: str

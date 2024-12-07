@@ -6,6 +6,7 @@ from infrastructure.repositories.user_repository import UserRepository
 from application.services.auth_service import AuthService
 from infrastructure.providers.sql_provider import SQLProvider
 from application.services.billboard_service import BillboardService
+from application.services.query_service import QueryService
 from pathlib import Path
 
 class Container(DeclarativeContainer):
@@ -49,6 +50,17 @@ class Container(DeclarativeContainer):
         AuthService,
         user_repository = user_repo,
         sql_provider = auth_sql_provider
+    )
+
+    query_sql_provider: SQLProvider = providers.Singleton(
+        SQLProvider,
+        Path(__file__).parent / "sql" / "queries"
+    )
+    query_service: QueryService = providers.Singleton(
+        QueryService,
+        user_repository = user_repo,
+        billboard_repository = billboard_repo,
+        sql_provider = query_sql_provider
     )
 
 

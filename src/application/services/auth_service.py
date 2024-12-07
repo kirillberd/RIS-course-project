@@ -7,7 +7,6 @@ from infrastructure.exceptions.auth_errors import (
     UserAlreadyExistsError,
     IncorrectPasswordError,
     IncorrectUsernameError,
-    AuthError,
 )
 import logging
 import bcrypt
@@ -25,14 +24,14 @@ class AuthService:
             password_hashed = self._hash_user_password(user.password)
             user.password = password_hashed
             query = self.sql_provider.get("create_user.sql", **user.model_dump())
-            self.user_repository.add(user, query)
+            self.user_repository.add(query)
         except IntegrityError:
             raise UserAlreadyExistsError("Пользователь с данным именем уже существует.")
 
     def login(self, user_login: UserLogin) -> BaseUser:
         try:
             query = self.sql_provider.get("get_user.sql", username=user_login.username)
-            user = self.user_repository.get(query)
+            user = self.user_repository.get_one(query)
         except Exception as e:
             module_logger.error(e)
             raise IncorrectUsernameError(
@@ -46,7 +45,7 @@ class AuthService:
     def login_as_admin(self, user_login: UserLogin) -> BaseUser:
         try:
             query = self.sql_provider.get("get_internal_user.sql", username=user_login.username)
-            user = self.user_repository.get(query)
+            user = self.user_repository.get_one(query)
         except Exception as e:
             module_logger.error(e)
             raise IncorrectUsernameError(

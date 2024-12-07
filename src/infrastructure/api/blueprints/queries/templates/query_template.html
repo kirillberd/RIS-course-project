@@ -1,66 +1,102 @@
-{% extends 'base_template.html' %}
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}">
+{% extends 'base_template.html' %} {% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('query_blueprint.static', filename='query_style.css') }}"
+/>
 
 <div class="query-container">
-   <div class="query-nav">
-       <button class="query-nav-btn active" data-form="users">Пользователи</button>
-       <button class="query-nav-btn" data-form="billboards">Билборды</button>
-       <button class="query-nav-btn" data-form="statistics">Статистика</button>
-   </div>
+  <div class="query-nav">
+    <button class="query-nav-btn active" data-form="users">Пользователи</button>
+    <button class="query-nav-btn" data-form="billboards">Билборды</button>
+    <button class="query-nav-btn" data-form="statistics">Статистика</button>
+  </div>
 
-   <div class="query-form" id="users-form">
-       <h2>Информация о пользователях</h2>
-       <div class="users-grid">
-           {% for user in users %}
-           <div class="user-card">
-               <div class="user-info">
-                   <div class="user-header">
-                       <h3>{{ user.firstname }} {{ user.lastname }}</h3>
-                       <span class="user-role">{{ user.role }}</span>
-                   </div>
-                   <div class="info-row">
-                       <span class="label">Логин:</span>
-                       <span class="value">{{ user.username }}</span>
-                   </div>
-                   <div class="info-row">
-                       <span class="label">Телефон:</span>
-                       <span class="value">{{ user.phone }}</span>
-                   </div>
-                   {% if user.role == 'owner' %}
-                   <div class="billboard-count">
-                       <span>Количество билбордов: {{ user.billboard_count }}</span>
-                   </div>
-                   {% endif %}
-               </div>
-           </div>
-           {% endfor %}
-       </div>
-   </div>
+  <div class="query-form" id="users-form">
+    <div class="query-filters">
+      <form method="GET" action="/queries/users" class="filters-form">
+        <div class="filter-group">
+          <label for="role">Роль пользователя</label>
+          <select id="role" name="role">
+            <option value="">Все роли</option>
+            <option value="analyst">Аналитик</option>
+            <option value="owner">Владелец билбордов</option>
+            <option value="customer">Клиент</option>
+          </select>
+        </div>
 
-   <div class="query-form hidden" id="billboards-form">
-       <!-- Здесь будет форма для билбордов -->
-   </div>
+        <div class="filter-group">
+          <label for="firstname">Имя</label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            placeholder="Введите имя"
+          />
+        </div>
+        <div class="filter-group">
+          <label for="lastname">Фамилия</label>
+          <input type="text" id="lastname", name="lastname" placeholder="Введите фамилию"/>
+        </div>
 
-   <div class="query-form hidden" id="statistics-form">
-       <!-- Здесь будет форма для статистики -->
-   </div>
+        <div class="filter-actions">
+          <button type="submit" class="filter-btn">Поиск</button>
+          <button type="reset" class="filter-btn reset">Сбросить</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="users-grid">
+      {% for user in users %}
+      <div class="user-card">
+        <div class="user-info">
+          <div class="user-header">
+            <h3>{{ user.firstname }} {{ user.lastname }}</h3>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Логин:</span>
+            <span class="value">{{ user.username }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Телефон:</span>
+            <span class="value">{{ user.phone }}</span>
+          </div>
+          {% if user.role == 'owner' %}
+          <div class="billboard-count">
+            <span>Количество билбордов: {{ user.billboard_count }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="query-form hidden" id="billboards-form">
+    <!-- Форма для билбордов -->
+  </div>
+
+  <div class="query-form hidden" id="statistics-form">
+    <!-- Форма для статистики -->
+  </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-   const navButtons = document.querySelectorAll('.query-nav-btn');
-   const forms = document.querySelectorAll('.query-form');
+  document.addEventListener("DOMContentLoaded", function () {
+    const navButtons = document.querySelectorAll(".query-nav-btn");
+    const forms = document.querySelectorAll(".query-form");
 
-   navButtons.forEach(button => {
-       button.addEventListener('click', () => {
-           navButtons.forEach(btn => btn.classList.remove('active'));
-           button.classList.add('active');
-           forms.forEach(form => form.classList.add('hidden'));
-           const formToShow = document.getElementById(`${button.dataset.form}-form`);
-           formToShow.classList.remove('hidden');
-       });
-   });
-});
+    navButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        navButtons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+        forms.forEach((form) => form.classList.add("hidden"));
+        const formToShow = document.getElementById(
+          `${button.dataset.form}-form`
+        );
+        formToShow.classList.remove("hidden");
+      });
+    });
+  });
 </script>
 {% endblock %}

@@ -17,7 +17,7 @@ query_blueprint = Blueprint(
 @auth_required
 @role_required("analyst")
 def query_menu():
-    return render_template("query_template.html")
+    return render_template("query_menu_template.html")
 
 @query_blueprint.route("/users", methods=["GET"])
 @auth_required
@@ -31,8 +31,8 @@ def user_query_handler(query_service: QueryService = Provide[Container.query_ser
     }
 
     user_query = UserQuery.model_validate(query_dict)
-    query_service.get_users(user_query)
-    return "users"
+    users = query_service.get_users(user_query)
+    return render_template("users.html", users=users)
 
 
 

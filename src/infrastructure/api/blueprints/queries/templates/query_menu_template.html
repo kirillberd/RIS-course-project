@@ -7,9 +7,11 @@
 <div class="query-container">
   <div class="query-nav">
     <button class="query-nav-btn active" data-form="users">Пользователи</button>
-    <button class="query-nav-btn" data-form="billboards">Билборды</button>
-    <button class="query-nav-btn" data-form="statistics">Статистика</button>
+    <button class="query-nav-btn" data-form="billboards">
+      Билборды по владельцам
+    </button>
   </div>
+
 
   <div class="query-form" id="users-form">
     <div class="query-filters">
@@ -23,7 +25,6 @@
             <option value="customer">Клиент</option>
           </select>
         </div>
-
         <div class="filter-group">
           <label for="firstname">Имя</label>
           <input
@@ -35,49 +36,66 @@
         </div>
         <div class="filter-group">
           <label for="lastname">Фамилия</label>
-          <input type="text" id="lastname", name="lastname" placeholder="Введите фамилию"/>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            placeholder="Введите фамилию"
+          />
         </div>
-
         <div class="filter-actions">
           <button type="submit" class="filter-btn">Поиск</button>
           <button type="reset" class="filter-btn reset">Сбросить</button>
         </div>
       </form>
     </div>
-
-    <div class="users-grid">
-      {% for user in users %}
-      <div class="user-card">
-        <div class="user-info">
-          <div class="user-header">
-            <h3>{{ user.firstname }} {{ user.lastname }}</h3>
-            <span class="user-role">{{ user.role }}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Логин:</span>
-            <span class="value">{{ user.username }}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Телефон:</span>
-            <span class="value">{{ user.phone }}</span>
-          </div>
-          {% if user.role == 'owner' %}
-          <div class="billboard-count">
-            <span>Количество билбордов: {{ user.billboard_count }}</span>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
   </div>
 
+  <!-- Форма поиска билбордов -->
   <div class="query-form hidden" id="billboards-form">
-    <!-- Форма для билбордов -->
-  </div>
-
-  <div class="query-form hidden" id="statistics-form">
-    <!-- Форма для статистики -->
+    <div class="query-filters">
+      <form
+        method="GET"
+        action="/queries/owner_billboards"
+        class="filters-form"
+      >
+        <div class="filter-group">
+          <label for="owner_id">ID владельца</label>
+          <input
+            type="number"
+            id="owner_id"
+            name="owner_id"
+            required
+            placeholder="Введите ID владельца"
+            min="1"
+          />
+        </div>
+        <div class="filter-group">
+          <label for="city">Город</label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            placeholder="Фильтр по городу (необязательно)"
+          />
+        </div>
+        <div class="filter-group">
+          <label for="quality">Минимальное качество</label>
+          <select id="quality" name="min_quality">
+            <option value="">Любое качество</option>
+            <option value="1">1 звезда</option>
+            <option value="2">2 звезды</option>
+            <option value="3">3 звезды</option>
+            <option value="4">4 звезды</option>
+            <option value="5">5 звезд</option>
+          </select>
+        </div>
+        <div class="filter-actions">
+          <button type="submit" class="filter-btn">Найти</button>
+          <button type="reset" class="filter-btn reset">Сбросить</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 

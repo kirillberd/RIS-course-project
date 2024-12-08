@@ -20,7 +20,7 @@ class QueryService:
         conditions = self._make_user_query_conditions(user_query)
         query = self.sql_provider.get("get_users.sql", **conditions)
         result = self.user_repository.get_many(query)
-
+        return result
     def _make_user_query_conditions(self, query_obj: UserQuery) -> dict:
         conditions = {}
    
@@ -43,12 +43,12 @@ class QueryService:
             conditions["role_clause"] = ""
 
         if query_obj.firstname:
-            conditions["firstname_clause"] = f"AND firstname ILIKE '%{query_obj.firstname}%'"
+            conditions["firstname_clause"] = f"AND firstname LIKE '%{query_obj.firstname}%'"
         else:
             conditions["firstname_clause"] = ""
 
         if query_obj.lastname:
-            conditions["lastname_clause"] = f"AND lastname ILIKE '%{query_obj.lastname}%'"
+            conditions["lastname_clause"] = f"AND lastname LIKE '%{query_obj.lastname}%'"
         else:
             conditions["lastname_clause"] = ""
 

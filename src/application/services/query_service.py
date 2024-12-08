@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from infrastructure.repositories.user_repository import UserRepository
 from infrastructure.repositories.billboard_repository import BillboardRepository
 from infrastructure.providers.sql_provider import SQLProvider
-from domain.queries import UserQuery
+from domain.queries import UserQuery, OwnerBillboardsQuery
 import logging
 
 module_logger = logging.getLogger(__name__)
@@ -21,6 +21,30 @@ class QueryService:
         query = self.sql_provider.get("get_users.sql", **conditions)
         result = self.user_repository.get_many(query)
         return result
+    
+    def get_owner_billboards(self, query_obj: OwnerBillboardsQuery):
+        condititions = self._make_billboard_query_conditions(query_obj)
+        query = self.sql_provider.get("get_owner_billboards.sql", **condititions)
+        result = self.billboard_repository.get(query)
+        return result
+
+    def _make_billboard_query_conditions(self, query_obj: OwnerBillboardsQuery) -> dict:
+        conditions = {}
+
+        conditions["owner_clause"] = f"AND billboard_owner_id = {query_obj.owner_id}"
+
+        if query_obj.city:
+            conditions["city_clause"] = f"AND city LIKE '%{query_obj.city}%'"
+        else:
+            conditions["city_clause"] = ""
+
+        if query_obj.min_quality is not None:
+            conditions["quality_clause"] = f"AND quality_indicator >= {query_obj.min_quality}"
+        else:
+            conditions["quality_clause"] = ""
+
+        return conditions
+
     def _make_user_query_conditions(self, query_obj: UserQuery) -> dict:
         conditions = {}
    

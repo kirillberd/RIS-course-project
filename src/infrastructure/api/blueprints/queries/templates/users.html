@@ -8,7 +8,7 @@
     </div>
 
     <h2>Результаты поиска пользователей</h2>
-    
+    {% if users %}
     <div class="table-container">
         <table class="users-table">
             <thead>
@@ -36,5 +36,11 @@
             </tbody>
         </table>
     </div>
+    {% else %}
+       <div class="no-results">
+           <p>Пользователи не найдены</p>
+           <p class="subtitle">Попробуйте изменить параметры поиска</p>
+       </div>
+   {% endif %}
 </div>
 {% endblock %}

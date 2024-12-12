@@ -1,0 +1,46 @@
+{% if session.get("role") == "customer" %}
+<link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='cart.css') }}">
+}
+{% set id = session.get("id") | string() %}
+{% if session.get("cart").get(id) %}
+{% set billboards = session.get("cart").get(id) %}
+{% else %}
+{% set billboards = [] %}
+{% endif %}
+
+
+<div class="cart-toggle" onclick="toggleCart()">
+    🛒
+    <span class="cart-count" id="cartCount">{{ billboards|length }}</span>
+</div>
+
+<div class="cart-panel" id="cartPanel">
+    <h3>Корзина</h3>
+    <div class="cart-items" id="cartItems">
+
+        {% for billboard in billboards %}
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <div>{{ billboard.get("city") }}</div>
+                <div>{{ billboard.get("addres") }}</div>
+                <div>{{ "{:,.2f}".format(billboard.get("cost")) }}</div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="cart-total">
+        <span>Итого:</span>
+        <span id="cartTotal">0 ₽</span>
+    </div>
+    <button class="rent-button" onclick="rentBillboards()">Арендовать все</button>
+</div>
+
+<script>
+function toggleCart() {
+    const panel = document.getElementById('cartPanel');
+    panel.classList.toggle('visible');
+}
+
+</script>
+{% endif %}

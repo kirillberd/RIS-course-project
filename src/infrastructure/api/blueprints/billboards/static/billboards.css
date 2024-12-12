@@ -131,29 +131,21 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
- }
- 
- .action-btn:first-child {
     background-color: #333;
     color: #fff;
  }
  
- .action-btn:first-child:hover {
+ .action-btn:first-child {
+    color: #fff;
+ }
+ 
+ .action-btn:hover {
     background-color: #444;
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
  }
  
- .action-btn.details {
-    background-color: #f5f5f5;
-    color: #333;
- }
- 
- .action-btn.details:hover {
-    background-color: #eee;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
- }
+
  
  .no-results {
     text-align: center;
@@ -224,3 +216,6 @@
         flex-direction: column;
     }
  }
+
+
+

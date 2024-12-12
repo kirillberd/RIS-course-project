@@ -67,5 +67,8 @@ def login_handler(auth_service: AuthService = Provide[Container.auth_service]):
 
 @auth_blueprint.route("/logout", methods=["GET"])
 def logout_handler():
+    cart = session.get("cart")
     session.clear()
+    session["cart"] = cart
+    session.modified = True
     return redirect("/")

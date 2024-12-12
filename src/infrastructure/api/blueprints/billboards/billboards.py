@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, redirect
 from datetime import datetime
 from infrastructure.decorators.auth_required import auth_required
 from infrastructure.decorators.role_required import role_required
@@ -12,7 +12,9 @@ from domain.billboards import BillboardQuery
 module_logger = logging.getLogger(__name__)
 
 
-billboard_blueprint = Blueprint("billboard_blueprint", __name__, template_folder="templates", static_folder="static")
+billboard_blueprint = Blueprint(
+    "billboard_blueprint", __name__, template_folder="templates", static_folder="static"
+)
 
 
 @billboard_blueprint.route("/", methods=["GET"])
@@ -32,7 +34,9 @@ def add_billboard_handler_get():
 @auth_required
 @role_required(role="owner")
 @inject
-def add_billboard_handler_post(billboard_service: BillboardService = Provide[Container.billboard_service]):
+def add_billboard_handler_post(
+    billboard_service: BillboardService = Provide[Container.billboard_service],
+):
     billboard_object = {
         "cost": request.form.get("cost", type=float),
         "size": request.form.get("size", type=float),
@@ -41,17 +45,26 @@ def add_billboard_handler_post(billboard_service: BillboardService = Provide[Con
         "city": request.form.get("city"),
         "billboard_owner_id": session.get("id"),
         "quality_indicator": request.form.get("quality_indicator", type=int),
-        "installation_date": datetime.strptime(request.form.get("installation_date"), "%Y-%m-%d") if request.form.get("installation_date") else None
+        "installation_date": (
+            datetime.strptime(request.form.get("installation_date"), "%Y-%m-%d")
+            if request.form.get("installation_date")
+            else None
+        ),
     }
 
     billboard = Billboard.model_validate(billboard_object)
     billboard_service.add_billboard(billboard)
-    return render_template("add_billboard_template.html", message="Билборд успешно добавлен.")
+    return render_template(
+        "add_billboard_template.html", message="Билборд успешно добавлен."
+    )
+
 
 @billboard_blueprint.route("/search", methods=["GET"])
 @auth_required
 @inject
-def search_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
+def search_handler(
+    billboard_service: BillboardService = Provide[Container.billboard_service],
+):
     query_params = {
         "city": request.args.get("city") if request.args.get("city") else None,
         "direction": (
@@ -95,10 +108,23 @@ def search_handler(billboard_service: BillboardService = Provide[Container.billb
         ),
     }
 
-    module_logger.info(query_params)
     query_obj = BillboardQuery.model_validate(query_params)
     result = billboard_service.get_billboards(query_obj)
-    module_logger.info(result)
     return render_template("billboards.html", billboards=result)
 
 
+@billboard_blueprint.route("/cart/add", methods=["POST"])
+@auth_required
+@role_required(role="customer")
+@inject
+def add_to_cart_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
+    billboard_id = int(request.form.get("billboard_id"))
+    if "cart" not in session:
+        session["cart"] = {session.get("id"):[]}
+    module_logger.info(session["cart"])
+    
+    billboard = billboard_service.get_billboard_by_id(billboard_id)
+    module_logger.info(billboard)
+    session["cart"][str(session.get("id"))].append(billboard.model_dump())
+    session.modified = True
+    return redirect(request.referrer)

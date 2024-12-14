@@ -119,12 +119,44 @@ def search_handler(
 @inject
 def add_to_cart_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
     billboard_id = int(request.form.get("billboard_id"))
+    user_id = str(session.get("id"))
     if "cart" not in session:
-        session["cart"] = {session.get("id"):[]}
+        session["cart"] = {user_id:[]}
     module_logger.info(session["cart"])
-    
-    billboard = billboard_service.get_billboard_by_id(billboard_id)
-    module_logger.info(billboard)
-    session["cart"][str(session.get("id"))].append(billboard.model_dump())
+    billboards_list: list = session["cart"][user_id]
+
+    new_billboard = billboard_service.get_billboard_by_id(billboard_id)
+    for billboard in billboards_list:
+        if billboard["id"] == new_billboard.id:
+            break
+    else:
+        billboards_list.append(new_billboard.model_dump())
+    session["cart"][user_id] = billboards_list
+    session.modified = True
+    return redirect(request.referrer)
+
+
+@billboard_blueprint.route("/cart/remove", methods=["POST"])
+@auth_required
+@role_required(role="customer")
+@inject
+def remove_from_cart_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
+    billboard_id = int(request.form.get("billboard_id"))
+    user_id = str(session.get("id"))
+    billboards_list = session.get("cart").get(user_id)
+    billboards_list_filtered = list(filter(lambda billboard: int(billboard["id"]) != billboard_id, billboards_list))
+    module_logger.info(f"Filtered list {len(billboards_list_filtered)}")
+    module_logger.info(f"Not filtered list {len(billboards_list)}")
+
+    session["cart"][user_id] = billboards_list_filtered
+    session.modified = True
+    return redirect(request.referrer)
+
+@billboard_blueprint.route("/cart/clear", methods = ["POST"])
+@auth_required
+@role_required(role="customer")
+def cleaar_cart_handler():
+    user_id = str(session.get("id"))
+    session["cart"][user_id] = []
     session.modified = True
     return redirect(request.referrer)

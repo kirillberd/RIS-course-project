@@ -1,13 +1,12 @@
 {% if session.get("role") == "customer" %}
 <link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='cart.css') }}">
-}
+
 {% set id = session.get("id") | string() %}
 {% if session.get("cart").get(id) %}
-{% set billboards = session.get("cart").get(id) %}
+    {% set billboards = session.get("cart").get(id) %}
 {% else %}
-{% set billboards = [] %}
+    {% set billboards = [] %}
 {% endif %}
-
 
 <div class="cart-toggle" onclick="toggleCart()">
     🛒
@@ -17,23 +16,27 @@
 <div class="cart-panel" id="cartPanel">
     <h3>Корзина</h3>
     <div class="cart-items" id="cartItems">
-
         {% for billboard in billboards %}
-        <div class="cart-item">
-            <div class="cart-item-info">
-                <div>{{ billboard.get("city") }}</div>
-                <div>{{ billboard.get("addres") }}</div>
-                <div>{{ "{:,.2f}".format(billboard.get("cost")) }}</div>
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <div>{{ billboard.get("city") }}</div>
+                    <div>{{ billboard.get("addres") }}</div>
+                    <div>{{ "{:,.2f}".format(billboard.get("cost")) }} ₽</div>
+                </div>
+                <form action="/billboards/cart/remove" method="POST">
+                    <input type="hidden" name="billboard_id" value="{{ billboard.id }}">
+                    <button type="submit" class="cart-item-remove">╳</button>
+                </form>
             </div>
-        </div>
         {% endfor %}
-
     </div>
-    <div class="cart-total">
-        <span>Итого:</span>
-        <span id="cartTotal">0 ₽</span>
-    </div>
-    <button class="rent-button" onclick="rentBillboards()">Арендовать все</button>
+    {% if billboards|length > 0%}
+    <button class="rent-button">Перейти к оформлению заказа</button>
+    <form action="/billboards/cart/clear" method="POST">
+        <input type="hidden" name="billboard_id">
+        <button type="submit" class="cart-item-remove">Очистить корзину</button>
+    </form>
+    {% endif %}
 </div>
 
 <script>
@@ -41,6 +44,5 @@ function toggleCart() {
     const panel = document.getElementById('cartPanel');
     panel.classList.toggle('visible');
 }
-
 </script>
 {% endif %}

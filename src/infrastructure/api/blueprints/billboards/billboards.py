@@ -1,13 +1,16 @@
 from flask import Blueprint, render_template, request, session, redirect
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from infrastructure.decorators.auth_required import auth_required
 from infrastructure.decorators.role_required import role_required
 from infrastructure.container import Container
 from dependency_injector.wiring import inject, Provide
 from domain.billboards import Billboard
 from application.services.billboard_service import BillboardService
+from application.services.order_service import OrderService
 import logging
 from domain.billboards import BillboardQuery
+from domain.order import Order, OrderLine
 
 module_logger = logging.getLogger(__name__)
 
@@ -117,11 +120,13 @@ def search_handler(
 @auth_required
 @role_required(role="customer")
 @inject
-def add_to_cart_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
+def add_to_cart_handler(
+    billboard_service: BillboardService = Provide[Container.billboard_service],
+):
     billboard_id = int(request.form.get("billboard_id"))
     user_id = str(session.get("id"))
     if "cart" not in session:
-        session["cart"] = {user_id:[]}
+        session["cart"] = {user_id: []}
     module_logger.info(session["cart"])
     billboards_list: list = session["cart"][user_id]
 
@@ -140,11 +145,15 @@ def add_to_cart_handler(billboard_service: BillboardService = Provide[Container.
 @auth_required
 @role_required(role="customer")
 @inject
-def remove_from_cart_handler(billboard_service: BillboardService = Provide[Container.billboard_service]):
+def remove_from_cart_handler(
+    billboard_service: BillboardService = Provide[Container.billboard_service],
+):
     billboard_id = int(request.form.get("billboard_id"))
     user_id = str(session.get("id"))
     billboards_list = session.get("cart").get(user_id)
-    billboards_list_filtered = list(filter(lambda billboard: int(billboard["id"]) != billboard_id, billboards_list))
+    billboards_list_filtered = list(
+        filter(lambda billboard: int(billboard["id"]) != billboard_id, billboards_list)
+    )
     module_logger.info(f"Filtered list {len(billboards_list_filtered)}")
     module_logger.info(f"Not filtered list {len(billboards_list)}")
 
@@ -152,7 +161,8 @@ def remove_from_cart_handler(billboard_service: BillboardService = Provide[Conta
     session.modified = True
     return redirect(request.referrer)
 
-@billboard_blueprint.route("/cart/clear", methods = ["POST"])
+
+@billboard_blueprint.route("/cart/clear", methods=["POST"])
 @auth_required
 @role_required(role="customer")
 def cleaar_cart_handler():
@@ -161,6 +171,7 @@ def cleaar_cart_handler():
     session.modified = True
     return redirect(request.referrer)
 
+
 @billboard_blueprint.route("/order", methods=["GET"])
 @auth_required
 @role_required(role="customer")
@@ -168,6 +179,42 @@ def order_handler():
     user_id = str(session.get("id"))
     if "cart" not in session or user_id not in session["cart"]:
         return redirect("/billboards")
-    
+
     billboards = session["cart"][user_id]
     return render_template("order_form.html", billboards=billboards)
+
+
+@billboard_blueprint.route("/order/submit", methods=["POST"])
+@auth_required
+@role_required(role="customer")
+@inject
+def order_submit_handler(order_service: OrderService = Provide[Container.order_service]):
+    billboard_ids = request.form.getlist("billboard_ids[]")
+    start_dates = request.form.getlist("date_begin[]")
+    months = request.form.getlist("months[]")
+    costs = request.form.getlist("costs[]")
+    total_cost = float(request.form.get("total_cost"))
+
+    registration_time = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+    module_logger.info(registration_time)
+    order = Order(
+        registration_date=registration_time,
+        total_cost=total_cost,
+        tenant_id=int(session.get("id")),
+    )
+
+    order_lines = []
+    for i in range(len(billboard_ids)):
+        start_date = datetime.strptime(start_dates[i], "%Y-%m-%d")
+        end_date = start_date + relativedelta(months=int(months[i]))
+        module_logger.info(start_date)
+        order_line = OrderLine(
+            date_begin=start_date,
+            date_end=end_date,
+            cost = float(costs[i]) * int(months[i]),
+            billboard_id=int(billboard_ids[i])
+        )
+        order_lines.append(order_line)
+    
+    order_service.make_order(order, order_lines)
+    return "Заказ создан"

@@ -7,6 +7,8 @@ from application.services.auth_service import AuthService
 from infrastructure.providers.sql_provider import SQLProvider
 from application.services.billboard_service import BillboardService
 from application.services.query_service import QueryService
+from infrastructure.repositories.order_repository import OrderRepository
+from application.services.order_service import OrderService
 from pathlib import Path
 
 class Container(DeclarativeContainer):
@@ -63,5 +65,18 @@ class Container(DeclarativeContainer):
         sql_provider = query_sql_provider
     )
 
+    order_repo: OrderRepository = providers.Singleton(
+        OrderRepository,
+        config = mysql_cm_config
+    )
 
-
+    order_sql_provider: SQLProvider = providers.Singleton(
+        SQLProvider,
+        Path(__file__).parent / "sql" / "orders"
+    )
+    
+    order_service: OrderService = providers.Singleton(
+        OrderService,
+        order_repository = order_repo,
+        sql_provider = order_sql_provider
+    )

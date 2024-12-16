@@ -9,7 +9,7 @@
 
    <h2>Оформление заказа</h2>
 
-   <form action="/billboards/order/create" method="POST" class="order-form">
+   <form action="/billboards/order/submit" method="POST" class="order-form">
        {% for billboard in billboards %}
        <div class="order-item">
            <div class="billboard-info">
@@ -29,19 +29,20 @@
            </div>
 
            <div class="rental-selection">
-               <input type="hidden" name="billboard_ids" value="{{ billboard.id }}">
+               <input type="hidden" name="billboard_ids[]" value="{{ billboard.id }}">
+               <input type="hidden" name="costs[]" value="{{ billboard.cost }}">
                <div class="date-group">
                    <label for="date-begin-{{ billboard.id }}">Дата начала аренды:</label>
                    <input type="date" 
                           id="date-begin-{{ billboard.id }}" 
-                          name="date_begin_{{ billboard.id }}"
+                          name="date_begin[]"
                           required
                           min="{{ today }}">
                </div>
                <div class="months-group">
                    <label for="months-{{ billboard.id }}">Срок аренды (месяцев):</label>
                    <select id="months-{{ billboard.id }}" 
-                           name="months_{{ billboard.id }}"
+                           name="months[]"
                            onchange="calculateTotal()">
                        <option value="1">1 месяц</option>
                        <option value="2">2 месяца</option>
@@ -57,6 +58,8 @@
            </div>
        </div>
        {% endfor %}
+
+       <input type="hidden" name="total_cost" id="hidden-total-cost">
 
        <div class="order-summary">
            <h3>Итого заказа</h3>
@@ -88,17 +91,16 @@ function calculateTotal() {
        const itemTotal = monthlyCost * months;
        totalCost += itemTotal;
        
-       // Обновляем стоимость для каждого билборда
        item.querySelector('.item-total').textContent = 
            itemTotal.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
    });
    
-   // Обновляем общую стоимость
    document.getElementById('total-cost').textContent = 
        totalCost.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
+   
+   document.getElementById('hidden-total-cost').value = totalCost;
 }
 
-// Вызываем расчет при загрузке страницы
 document.addEventListener('DOMContentLoaded', calculateTotal);
 </script>
 {% endblock %}

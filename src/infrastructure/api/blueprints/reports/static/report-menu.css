@@ -1,0 +1,105 @@
+.reports-container {
+    max-width: 600px;
+    margin: 6rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .reports-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+ }
+ 
+ .error-message {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-radius: 6px;
+    color: #c62828;
+    text-align: center;
+ }
+ 
+ .report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+ }
+ 
+ .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+ }
+ 
+ .form-group label {
+    color: #666;
+    font-size: 0.95rem;
+ }
+ 
+ .form-group select {
+    padding: 0.8rem;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background-color: white;
+ }
+ 
+ .btn-generate,
+ .btn-view {
+    padding: 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+ }
+ 
+ .btn-generate {
+    background-color: #333;
+    color: white;
+ }
+ 
+ .btn-generate:hover {
+    background-color: #444;
+    transform: translateY(-2px);
+ }
+ 
+ .btn-view {
+    background-color: #4CAF50;  /* Зеленый цвет для кнопки просмотра */
+    color: white;
+ }
+ 
+ .btn-view:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+ }
+ 
+ .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+ }
+ 
+ .btn-generate, .btn-view {
+    flex: 1;  
+ }
+ 
+ @media (max-width: 768px) {
+    .reports-container {
+        margin: 4rem 1rem;
+        padding: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-generate, .btn-view {
+        width: 100%;
+    }
+ }

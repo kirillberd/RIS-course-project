@@ -12,6 +12,8 @@ from application.services.order_service import OrderService
 from infrastructure.cache.billboards_cache import BillboardsCache
 from pathlib import Path
 from datetime import timedelta
+from infrastructure.repositories.report_repository import ReportRepository
+from application.services.report_service import ReportService
 from redis import Redis
 
 class Container(DeclarativeContainer):
@@ -98,3 +100,19 @@ class Container(DeclarativeContainer):
         order_repository = order_repo,
         sql_provider = order_sql_provider
     )
+
+    report_sql_provider: SQLProvider = providers.Singleton(
+        SQLProvider,
+        Path(__file__).parent / "sql" / "reports"
+    )
+
+    report_repo: ReportRepository = providers.Singleton(
+        config = mysql_cm_config
+    )
+
+    report_service: ReportService = providers.Singleton(
+        ReportService,
+        sql_provider = report_sql_provider,
+        report_repository = report_repo
+    )
+

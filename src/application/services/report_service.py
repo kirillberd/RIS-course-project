@@ -45,5 +45,5 @@ class ReportService:
         else:
             query_name = self.report_dict.get(name).get("query_name")
             query = self.sql_provider.get(query_name, table_name=table_name)
-            self.report_repository.get_report(query)
+            return self.report_repository.get_report(query)
             

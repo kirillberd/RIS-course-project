@@ -37,8 +37,8 @@ def view_report_handler(
             report_service.create_report(name, year, month)
             return render_template("report_menu.html", message="Отчет успешно создан")
         else:
-            report_service.view_report(name, year, month)
-            return render_template("report_menu.html")
+            report_data = report_service.view_report(name, year, month)
+            return render_template("report.html", report_data=report_data, month=month, year=year)
     except Exception as e:
         return render_template("report_menu.html", error=str(e))
 

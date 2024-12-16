@@ -107,6 +107,7 @@ class Container(DeclarativeContainer):
     )
 
     report_repo: ReportRepository = providers.Singleton(
+        ReportRepository,
         config = mysql_cm_config
     )
 

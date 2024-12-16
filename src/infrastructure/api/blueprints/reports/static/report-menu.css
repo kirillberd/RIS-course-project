@@ -22,7 +22,13 @@
     color: #c62828;
     text-align: center;
  }
- 
+.message{
+   padding: 1rem;
+   margin-bottom: 2rem;
+   border: 1px solid #666;
+   border-radius: 6px;
+   text-align: center;
+}
  .report-form {
     display: flex;
     flex-direction: column;
@@ -70,7 +76,7 @@
  }
  
  .btn-view {
-    background-color: #4CAF50;  /* Зеленый цвет для кнопки просмотра */
+    background-color: #4CAF50; 
     color: white;
  }
  

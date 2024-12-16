@@ -9,7 +9,10 @@ from application.services.billboard_service import BillboardService
 from application.services.query_service import QueryService
 from infrastructure.repositories.order_repository import OrderRepository
 from application.services.order_service import OrderService
+from infrastructure.cache.billboards_cache import BillboardsCache
 from pathlib import Path
+from datetime import timedelta
+from redis import Redis
 
 class Container(DeclarativeContainer):
     config = providers.Configuration()
@@ -32,10 +35,25 @@ class Container(DeclarativeContainer):
         Path(__file__).parent / "sql" / "billboards"
     )
 
+    redis_client: Redis = providers.Singleton(
+        Redis
+    )
+    cache_ttl: timedelta = providers.Singleton(
+        timedelta,
+        hours=1,
+    )
+
+    billboards_cache: BillboardsCache = providers.Singleton(
+        BillboardsCache,
+        redis_client = redis_client,
+        cache_ttl = cache_ttl
+    )
+
     billboard_service: BillboardService = providers.Singleton(
         BillboardService,
         sql_provider = billboard_sql_provider,
-        billboard_repository = billboard_repo
+        billboard_repository = billboard_repo,
+        billboards_cache = billboards_cache
     )
 
     user_repo: UserRepository = providers.Singleton(

@@ -3,17 +3,30 @@ from infrastructure.repositories.billboard_repository import BillboardRepository
 from infrastructure.providers.sql_provider import SQLProvider
 from domain.billboards import BillboardQuery, Billboard
 from typing import List
+from infrastructure.cache.billboards_cache import BillboardsCache
+import logging
+
+module_logger = logging.getLogger(__name__)
 
 @dataclass
 class BillboardService:
     sql_provider: SQLProvider
     billboard_repository: BillboardRepository
-
+    billboards_cache: BillboardsCache
 
     def get_billboards(self, query_obj: BillboardQuery) -> List[Billboard]:
+
+        cached_billboards = self.billboards_cache.get_billboards(query_obj)
+        if cached_billboards:
+            module_logger.info("Return cached billboards!")
+            return cached_billboards
+    
         conditions_dict = self._make_query_conditions(query_obj)
         query = self.sql_provider.get("get_billboards.sql", **conditions_dict)
-        return self.billboard_repository.get(query)
+
+        billboards = self.billboard_repository.get(query)
+        self.billboards_cache.set_billboards(query_obj, billboards)
+        return billboards
     
     def add_billboard(self, billboard: Billboard) -> None:
         query = self.sql_provider.get("add_billboard.sql", **billboard.model_dump())

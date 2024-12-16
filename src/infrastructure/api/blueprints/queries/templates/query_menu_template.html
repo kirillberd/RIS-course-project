@@ -1,120 +1,22 @@
-{% extends 'base_template.html' %} {% block content %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('query_blueprint.static', filename='query_style.css') }}"
-/>
+{% extends 'base_template.html' %} 
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}"/>
 
 <div class="query-container">
-  <div class="query-nav">
-    <button class="query-nav-btn active" data-form="users">Пользователи</button>
-    <button class="query-nav-btn" data-form="billboards">
-      Билборды по владельцам
-    </button>
-  </div>
-
-
-  <div class="query-form" id="users-form">
-    <div class="query-filters">
-      <form method="GET" action="/queries/users" class="filters-form">
-        <div class="filter-group">
-          <label for="role">Роль пользователя</label>
-          <select id="role" name="role">
-            <option value="">Все роли</option>
-            <option value="analyst">Аналитик</option>
-            <option value="owner">Владелец билбордов</option>
-            <option value="customer">Клиент</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="firstname">Имя</label>
-          <input
-            type="text"
-            id="firstname"
-            name="firstname"
-            placeholder="Введите имя"
-          />
-        </div>
-        <div class="filter-group">
-          <label for="lastname">Фамилия</label>
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            placeholder="Введите фамилию"
-          />
-        </div>
-        <div class="filter-actions">
-          <button type="submit" class="filter-btn">Поиск</button>
-          <button type="reset" class="filter-btn reset">Сбросить</button>
-        </div>
-      </form>
+    <h2>Запросы</h2>
+    <div class="query-links">
+        <a href="/queries/users-form" class="query-link">
+            <div class="query-card">
+                <h3>Поиск пользователей</h3>
+                <p>Поиск пользователей по роли и персональным данным</p>
+            </div>
+        </a>
+        <a href="/queries/billboards-form" class="query-link">
+            <div class="query-card">
+                <h3>Билборды по владельцам</h3>
+                <p>Поиск билбордов конкретного владельца с фильтрацией</p>
+            </div>
+        </a>
     </div>
-  </div>
-
-  <!-- Форма поиска билбордов -->
-  <div class="query-form hidden" id="billboards-form">
-    <div class="query-filters">
-      <form
-        method="GET"
-        action="/queries/owner_billboards"
-        class="filters-form"
-      >
-        <div class="filter-group">
-          <label for="owner_id">ID владельца</label>
-          <input
-            type="number"
-            id="owner_id"
-            name="owner_id"
-            required
-            placeholder="Введите ID владельца"
-            min="1"
-          />
-        </div>
-        <div class="filter-group">
-          <label for="city">Город</label>
-          <input
-            type="text"
-            id="city"
-            name="city"
-            placeholder="Фильтр по городу (необязательно)"
-          />
-        </div>
-        <div class="filter-group">
-          <label for="quality">Минимальное качество</label>
-          <select id="quality" name="min_quality">
-            <option value="">Любое качество</option>
-            <option value="1">1 звезда</option>
-            <option value="2">2 звезды</option>
-            <option value="3">3 звезды</option>
-            <option value="4">4 звезды</option>
-            <option value="5">5 звезд</option>
-          </select>
-        </div>
-        <div class="filter-actions">
-          <button type="submit" class="filter-btn">Найти</button>
-          <button type="reset" class="filter-btn reset">Сбросить</button>
-        </div>
-      </form>
-    </div>
-  </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const navButtons = document.querySelectorAll(".query-nav-btn");
-    const forms = document.querySelectorAll(".query-form");
-
-    navButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        navButtons.forEach((btn) => btn.classList.remove("active"));
-        button.classList.add("active");
-        forms.forEach((form) => form.classList.add("hidden"));
-        const formToShow = document.getElementById(
-          `${button.dataset.form}-form`
-        );
-        formToShow.classList.remove("hidden");
-      });
-    });
-  });
-</script>
 {% endblock %}

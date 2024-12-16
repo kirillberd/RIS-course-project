@@ -1,0 +1,61 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}"/>
+
+<div class="query-container">
+   <div class="header-actions">
+       <a href="/queries" class="back-button">← Вернуться к запросам</a>
+   </div>
+   
+   <h2>Поиск билбордов по владельцам</h2>
+
+   {% if error %}
+   <div class="error-message">
+       {{ error }}
+   </div>
+   {% endif %}
+
+   <div class="query-filters">
+       <form method="GET" action="/queries/owner_billboards" class="filters-form">
+           <div class="filter-group">
+               <label for="owner_id">ID владельца</label>
+               <input
+                   type="number"
+                   id="owner_id"
+                   name="owner_id"
+                   required
+                   placeholder="Введите ID владельца"
+                   min="1"
+               />
+           </div>
+
+           <div class="filter-group">
+               <label for="city">Город</label>
+               <input
+                   type="text"
+                   id="city"
+                   name="city"
+                   placeholder="Фильтр по городу (необязательно)"
+               />
+           </div>
+
+           <div class="filter-group">
+               <label for="quality">Минимальное качество</label>
+               <select id="quality" name="min_quality">
+                   <option value="">Любое качество</option>
+                   <option value="1">1 звезда</option>
+                   <option value="2">2 звезды</option>
+                   <option value="3">3 звезды</option>
+                   <option value="4">4 звезды</option>
+                   <option value="5">5 звезд</option>
+               </select>
+           </div>
+
+           <div class="filter-actions">
+               <button type="submit" class="filter-btn">Найти</button>
+               <button type="reset" class="filter-btn reset">Сбросить</button>
+           </div>
+       </form>
+   </div>
+</div>
+{% endblock %}

@@ -19,6 +19,18 @@ query_blueprint = Blueprint(
 def query_menu():
     return render_template("query_menu_template.html")
 
+@query_blueprint.route("/users-form", methods=["GET"])
+@auth_required
+@role_required("analyst")
+def user_form():
+    return render_template("user_query_form.html")
+
+@query_blueprint.route("/billboards-form", methods=["GET"])
+@auth_required
+@role_required("analyst")
+def billboard_form():
+    return render_template("billboard_query_form.html")
+
 @query_blueprint.route("/users", methods=["GET"])
 @auth_required
 @role_required("analyst")
@@ -50,3 +62,4 @@ def owner_billboards_query_handler(query_service: QueryService = Provide[Contain
     owner_query = OwnerBillboardsQuery.model_validate(query_dict)
     result = query_service.get_owner_billboards(owner_query)
     return render_template("owner_billboards.html", billboards=result, owner_id=owner_query.owner_id)
+

@@ -1,0 +1,104 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='order.css') }}">
+
+<div class="order-container">
+   <div class="header-actions">
+       <a href="/billboards" class="back-button">← Вернуться к поиску</a>
+   </div>
+
+   <h2>Оформление заказа</h2>
+
+   <form action="/billboards/order/create" method="POST" class="order-form">
+       {% for billboard in billboards %}
+       <div class="order-item">
+           <div class="billboard-info">
+               <h3>Билборд #{{ billboard.id }}</h3>
+               <div class="info-row">
+                   <span class="label">Город:</span>
+                   <span class="value">{{ billboard.city }}</span>
+               </div>
+               <div class="info-row">
+                   <span class="label">Адрес:</span>
+                   <span class="value">{{ billboard.addres }}</span>
+               </div>
+               <div class="info-row">
+                   <span class="label">Стоимость в месяц:</span>
+                   <span class="value">{{ "{:,.2f}".format(billboard.cost) }} ₽</span>
+               </div>
+           </div>
+
+           <div class="rental-selection">
+               <input type="hidden" name="billboard_ids" value="{{ billboard.id }}">
+               <div class="date-group">
+                   <label for="date-begin-{{ billboard.id }}">Дата начала аренды:</label>
+                   <input type="date" 
+                          id="date-begin-{{ billboard.id }}" 
+                          name="date_begin_{{ billboard.id }}"
+                          required
+                          min="{{ today }}">
+               </div>
+               <div class="months-group">
+                   <label for="months-{{ billboard.id }}">Срок аренды (месяцев):</label>
+                   <select id="months-{{ billboard.id }}" 
+                           name="months_{{ billboard.id }}"
+                           onchange="calculateTotal()">
+                       <option value="1">1 месяц</option>
+                       <option value="2">2 месяца</option>
+                       <option value="3">3 месяца</option>
+                       <option value="6">6 месяцев</option>
+                       <option value="12">12 месяцев</option>
+                   </select>
+               </div>
+               <div class="rental-cost">
+                   <span>Стоимость аренды: </span>
+                   <span class="item-total" data-cost="{{ billboard.cost }}">{{ "{:,.2f}".format(billboard.cost) }} ₽</span>
+               </div>
+           </div>
+       </div>
+       {% endfor %}
+
+       <div class="order-summary">
+           <h3>Итого заказа</h3>
+           <div class="summary-row">
+               <span>Количество билбордов:</span>
+               <span>{{ billboards|length }}</span>
+           </div>
+           <div class="summary-row">
+               <span>Общая стоимость:</span>
+               <span id="total-cost">0.00 ₽</span>
+           </div>
+       </div>
+
+       <div class="form-actions">
+           <button type="submit" class="submit-btn">Оформить заказ</button>
+           <button type="button" class="cancel-btn" onclick="history.back()">Отмена</button>
+       </div>
+   </form>
+</div>
+
+<script>
+function calculateTotal() {
+   let totalCost = 0;
+   
+   document.querySelectorAll('.rental-selection').forEach(item => {
+       const monthlyCost = parseFloat(item.querySelector('.item-total').dataset.cost);
+       const months = parseInt(item.querySelector('select').value);
+       
+       const itemTotal = monthlyCost * months;
+       totalCost += itemTotal;
+       
+       // Обновляем стоимость для каждого билборда
+       item.querySelector('.item-total').textContent = 
+           itemTotal.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
+   });
+   
+   // Обновляем общую стоимость
+   document.getElementById('total-cost').textContent = 
+       totalCost.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
+}
+
+// Вызываем расчет при загрузке страницы
+document.addEventListener('DOMContentLoaded', calculateTotal);
+</script>
+{% endblock %}

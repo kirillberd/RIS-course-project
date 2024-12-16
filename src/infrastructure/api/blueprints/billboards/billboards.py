@@ -160,3 +160,14 @@ def cleaar_cart_handler():
     session["cart"][user_id] = []
     session.modified = True
     return redirect(request.referrer)
+
+@billboard_blueprint.route("/order", methods=["GET"])
+@auth_required
+@role_required(role="customer")
+def order_handler():
+    user_id = str(session.get("id"))
+    if "cart" not in session or user_id not in session["cart"]:
+        return redirect("/billboards")
+    
+    billboards = session["cart"][user_id]
+    return render_template("order_form.html", billboards=billboards)

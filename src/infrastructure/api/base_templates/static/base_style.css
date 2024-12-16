@@ -115,3 +115,105 @@ body {
     transform: translateX(-5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
+
+.welcome-container {
+    max-width: 1200px;
+    margin: 6rem auto 2rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.description {
+    padding: 1rem;
+}
+
+.description h2 {
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+.description p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.roles-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.role-block {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.role-block h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #eee;
+}
+
+.role-block ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.role-block ul li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+    color: #555;
+}
+
+.role-block ul li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #333;
+}
+
+.getting-started {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.getting-started h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.getting-started a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.getting-started a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .welcome-container {
+        margin: 4rem 1rem;
+        padding: 1rem;
+    }
+
+    .roles-info {
+        grid-template-columns: 1fr;
+    }
+}

@@ -4,8 +4,13 @@
 {% set id = session.get("id") | string() %}
 {% if session.get("cart").get(id) %}
     {% set billboards = session.get("cart").get(id) %}
+    {% set ns = namespace(total = 0) %}
+    {% for billboard in billboards %}
+        {% set ns.total = ns.total + billboard.get("cost") %}
+    {% endfor %}
 {% else %}
     {% set billboards = [] %}
+    {% set ns = namespace(total = 0) %}
 {% endif %}
 
 <div class="cart-toggle" onclick="toggleCart()">
@@ -30,13 +35,15 @@
             </div>
         {% endfor %}
     </div>
-    {% if billboards|length > 0%}
+    <div class="cart-total">
+        <span>Итого:</span>
+        <span id="cartTotal">{{ "{:,.2f}".format(ns.total) }} ₽</span>
+    </div>
     <button class="rent-button">Перейти к оформлению заказа</button>
     <form action="/billboards/cart/clear" method="POST">
         <input type="hidden" name="billboard_id">
         <button type="submit" class="cart-item-remove">Очистить корзину</button>
     </form>
-    {% endif %}
 </div>
 
 <script>

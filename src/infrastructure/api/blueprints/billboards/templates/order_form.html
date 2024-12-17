@@ -8,7 +8,9 @@
    </div>
 
    <h2>Оформление заказа</h2>
-
+   {% if message %}
+   <div>{{ message }}</div>
+   {% endif %}
    <form action="/billboards/order/submit" method="POST" class="order-form">
        {% for billboard in billboards %}
        <div class="order-item">
@@ -72,11 +74,12 @@
                <span id="total-cost">0.00 ₽</span>
            </div>
        </div>
-
+       {% if billboards %}
        <div class="form-actions">
            <button type="submit" class="submit-btn">Оформить заказ</button>
            <button type="button" class="cancel-btn" onclick="history.back()">Отмена</button>
        </div>
+       {% endif %}
    </form>
 </div>
 

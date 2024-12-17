@@ -220,4 +220,4 @@ def order_submit_handler(order_service: OrderService = Provide[Container.order_s
     user_id = str(session.get("id"))
     session["cart"][user_id] = []
     session.modified = True
-    return "Заказ создан"
+    return render_template("order_form.html", message="Заказ создан")

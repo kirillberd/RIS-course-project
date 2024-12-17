@@ -1,0 +1,39 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="static/auth.css">
+<div class="auth-container">
+    <h2>Вход в систему</h2>
+    
+    <div class="auth-form">
+        <form method="POST" action="/auth/login">
+            <div class="form-group">
+                <label for="login-username">Имя пользователя</label>
+                <input type="text" id="login-username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Пароль</label>
+                <input type="password" id="login-password" name="password" required>
+            </div>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_admin" id="login-is-admin">
+                    <span class="checkbox-text">Войти как администратор</span>
+                </label>
+            </div>
+            <button type="submit" class="form-submit">Войти</button>
+        </form>
+        <div class="auth-links">
+            <a href="/auth/register">Зарегистрироваться</a>
+        </div>
+    </div>
+    
+    {% if error %}
+    <div class="auth-error-message">
+        <p>{{ error }}</p>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

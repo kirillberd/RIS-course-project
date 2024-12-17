@@ -20,11 +20,17 @@ auth_blueprint = Blueprint(
 def auth_error_handler(err):
     return render_template("auth_template.html", error="Ошибка авторизациии", message=err.name), 401
 
-@auth_blueprint.route("/", methods=["GET"])
-def auth_main():
+@auth_blueprint.route("/login", methods=["GET"])
+def login():
     if session.get("username"):
         return redirect("/")
-    return render_template("auth_template.html")
+    return render_template("login.html")
+
+@auth_blueprint.route("/register", methods=["GET"])
+def register():
+    if session.get("username"):
+        return redirect("/")
+    return render_template("register.html")
 
 
 @auth_blueprint.route("/register", methods=["POST"])

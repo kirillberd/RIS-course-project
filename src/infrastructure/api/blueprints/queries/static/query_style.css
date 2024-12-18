@@ -320,3 +320,37 @@
     color: #666;
     line-height: 1.5;
 }
+
+.billboard-list {
+    max-height: 100px;
+    overflow-y: auto;
+    font-size: 0.9em;
+ }
+ 
+ .billboard-item {
+    padding: 2px 0;
+    border-bottom: 1px solid #eee;
+ }
+ 
+ .billboard-item:last-child {
+    border-bottom: none;
+ }
+ 
+ /* Стилизация скроллбара */
+ .billboard-list::-webkit-scrollbar {
+    width: 6px;
+ }
+ 
+ .billboard-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+ }
+ 
+ .billboard-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+ }
+ 
+ .billboard-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+ }

@@ -25,6 +25,12 @@ def query_menu():
 def user_form():
     return render_template("user_query_form.html")
 
+@query_blueprint.route("/customer-form", methods=["GET"])
+@auth_required
+@role_required("analyst")
+def customer_form():
+    return render_template("customer_form.html")
+
 @query_blueprint.route("/billboards-form", methods=["GET"])
 @auth_required
 @role_required("analyst")

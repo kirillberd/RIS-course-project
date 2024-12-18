@@ -35,24 +35,35 @@
                <input type="hidden" name="costs[]" value="{{ billboard.cost }}">
                <div class="date-group">
                    <label for="date-begin-{{ billboard.id }}">Дата начала аренды:</label>
-                   <input type="date" 
-                          id="date-begin-{{ billboard.id }}" 
-                          name="date_begin[]"
-                          required
-                          min="{{ today }}">
+                   <input type="date"
+                   id="date-begin-{{ billboard.id }}"
+                   name="date_begin[]"
+                   required
+                   value="{{ billboard.date_start.strftime('%Y-%m-%d') }}"
+                   readonly>
                </div>
                <div class="months-group">
-                   <label for="months-{{ billboard.id }}">Срок аренды (месяцев):</label>
-                   <select id="months-{{ billboard.id }}" 
-                           name="months[]"
-                           onchange="calculateTotal()">
-                       <option value="1">1 месяц</option>
-                       <option value="2">2 месяца</option>
-                       <option value="3">3 месяца</option>
-                       <option value="6">6 месяцев</option>
-                       <option value="12">12 месяцев</option>
-                   </select>
-               </div>
+                <label for="months-{{ billboard.id }}">Срок аренды (месяцев):</label>
+                <select id="months-{{ billboard.id }}" 
+                        name="months[]"
+                        onchange="calculateTotal()">
+                    {% if billboard.rental_months >= 1 %}
+                        <option value="1">1 месяц</option>
+                    {% endif %}
+                    {% if billboard.rental_months >= 2 %}
+                        <option value="2">2 месяца</option>
+                    {% endif %}
+                    {% if billboard.rental_months >= 3 %}
+                        <option value="3">3 месяца</option>
+                    {% endif %}
+                    {% if billboard.rental_months >= 6 %}
+                        <option value="6">6 месяцев</option>
+                    {% endif %}
+                    {% if billboard.rental_months >= 12 %}
+                        <option value="12">12 месяцев</option>
+                    {% endif %}
+                </select>
+             </div>
                <div class="rental-cost">
                    <span>Стоимость аренды: </span>
                    <span class="item-total" data-cost="{{ billboard.cost }}">{{ "{:,.2f}".format(billboard.cost) }} ₽</span>

@@ -113,7 +113,7 @@ def search_handler(
     query_obj = BillboardQuery.model_validate(query_params)
     module_logger.info(query_obj)
     result = billboard_service.get_billboards(query_obj)
-    return render_template("billboards.html", billboards=result)
+    return render_template("billboards.html", billboards=result, rental_months=months, date_start=date_start)
 
 
 
@@ -125,6 +125,10 @@ def add_to_cart_handler(
     billboard_service: BillboardService = Provide[Container.billboard_service],
 ):
     billboard_id = int(request.form.get("billboard_id"))
+    rental_months = int(request.form.get("rental_months"))
+    date_start = datetime.strptime(request.form.get("date_start"), "%Y-%m-%d %H:%M:%S")
+    module_logger.info(date_start)
+    module_logger.info(rental_months)
     user_id = str(session.get("id"))
     if "cart" not in session:
         session["cart"] = {user_id: []}
@@ -136,7 +140,10 @@ def add_to_cart_handler(
         if billboard["id"] == new_billboard.id:
             break
     else:
-        billboards_list.append(new_billboard.model_dump())
+        billboard_dict = new_billboard.model_dump()
+        billboard_dict["rental_months"] = rental_months
+        billboard_dict["date_start"] = date_start
+        billboards_list.append(billboard_dict)
     session["cart"][user_id] = billboards_list
     session.modified = True
     return redirect(request.referrer)

@@ -54,6 +54,8 @@
                <div class="billboard-actions">
                 <form action="/billboards/cart/add" method="POST">
                     <input type="hidden" name="billboard_id" value="{{ billboard.id }}">
+                    <input type="hidden" name="rental_months" value="{{ rental_months}}">
+                    <input type="hidden" name="date_start" value="{{ date_start }}">
                     <button type="submit" class="action-btn">В корзину</button>
                 </form>
                </div>

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from infrastructure.decorators.auth_required import auth_required
 from infrastructure.decorators.role_required import role_required
@@ -23,7 +23,7 @@ billboard_blueprint = Blueprint(
 @billboard_blueprint.route("/", methods=["GET"])
 @auth_required
 def query_menu():
-    return render_template("search_billboards.html")
+    return render_template("search_billboards.html", today = date.today().isoformat())
 
 
 @billboard_blueprint.route("/add", methods=["GET"])
@@ -99,21 +99,22 @@ def search_handler(
             else None
         ),
         "address": request.args.get("address") if request.args.get("address") else None,
-        "date_from": (
-            datetime.strptime(request.args.get("date_from"), "%Y-%m-%d")
-            if request.args.get("date_from")
+        "date_start": (
+            datetime.strptime(request.args.get("date_start"), "%Y-%m-%d")
+            if request.args.get("date_start")
             else None
         ),
-        "date_to": (
-            datetime.strptime(request.args.get("date_to"), "%Y-%m-%d")
-            if request.args.get("date_to")
-            else None
-        ),
-    }
 
+    }
+    date_start = query_params.get("date_start")
+    months = request.args.get("rental_months", type=int)
+    date_end = date_start + relativedelta(months=months)
+    query_params["date_end"] = date_end
     query_obj = BillboardQuery.model_validate(query_params)
+    module_logger.info(query_obj)
     result = billboard_service.get_billboards(query_obj)
     return render_template("billboards.html", billboards=result)
+
 
 
 @billboard_blueprint.route("/cart/add", methods=["POST"])

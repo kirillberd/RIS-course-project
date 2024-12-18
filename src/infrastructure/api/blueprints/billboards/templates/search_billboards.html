@@ -2,7 +2,12 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('billboard_blueprint.static', filename='query.css') }}">
 
+
+
 <div class="query-container">
+    <div class="header-actions">
+        <a href="/" class="back-button">← Вернуться в меню</a>
+    </div>
     <h2>Поиск билбордов</h2>
     
     <form method="GET" action="/billboards/search" class="query-form">
@@ -61,14 +66,22 @@
             </div>
         </div>
 
-        <div class="date-range">
-            <label>Период установки:</label>
+        <div class="rental-period">
+            <label>Период аренды:</label>
             <div class="form-row">
                 <div class="form-group">
-                    <input type="date" id="date-from" name="date_from">
+                    <label for="date-start">Дата начала аренды</label>
+                    <input type="date" id="date-start" name="date_start" required min="{{ today }}">
                 </div>
                 <div class="form-group">
-                    <input type="date" id="date-to" name="date_to">
+                    <label for="rental-months">Срок аренды</label>
+                    <select id="rental-months" name="rental_months" required>
+                        <option value="1">1 месяц</option>
+                        <option value="2">2 месяца</option>
+                        <option value="3">3 месяца</option>
+                        <option value="6">6 месяцев</option>
+                        <option value="12">12 месяцев</option>
+                    </select>
                 </div>
             </div>
         </div>

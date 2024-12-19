@@ -1,0 +1,53 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}">
+<div class="query-container">
+    <div class="header-actions">
+        <a href="/queries" class="back-button">← Вернуться к запросам</a>
+    </div>
+
+    <h2>Билборды арендатора {{ tenant_lastname }} за {{ month }}.{{ year }}</h2>
+
+    {% if billboards %}
+    <div class="table-container">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Город</th>
+                    <th>Адрес</th>
+                    <th>Размер</th>
+                    <th>Стоимость</th>
+                    <th>Качество</th>
+                    <th>Направление</th>
+                    <th>Период аренды</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for billboard in billboards %}
+                <tr>
+                    <td>{{ billboard.id }}</td>
+                    <td>{{ billboard.city }}</td>
+                    <td>{{ billboard.addres }}</td>
+                    <td>{{ billboard.size }} м²</td>
+                    <td>{{ "{:,.2f}".format(billboard.cost) }} ₽</td>
+                    <td>
+                        <div class="quality-stars">
+                            {% for i in range(billboard.quality_indicator) %}★{% endfor %}
+                        </div>
+                    </td>
+                    <td>{{ billboard.direction }}</td>
+                    <td>{{ billboard.date_begin.strftime('%d.%m.%Y') }} - {{ billboard.date_end.strftime('%d.%m.%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-results">
+        <p>Билборды не найдены</p>
+        <p class="subtitle">Проверьте правильность введенных данных</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

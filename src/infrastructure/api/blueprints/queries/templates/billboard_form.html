@@ -1,0 +1,63 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('query_blueprint.static', filename='query_style.css') }}"/>
+
+<div class="query-container">
+    <div class="header-actions">
+        <a href="/queries" class="back-button">← Вернуться к запросам</a>
+    </div>
+
+    <h2>Поиск билбордов арендатора</h2>
+
+    <div class="query-form">
+        <div class="query-filters">
+            <form method="GET" action="/queries/billboards" class="filters-form">
+                <div class="filter-group">
+                    <label for="lastname">Фамилия арендатора</label>
+                    <input 
+                        type="text" 
+                        id="lastname" 
+                        name="lastname" 
+                        required
+                        placeholder="Введите фамилию"
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="filter-group">
+                        <label for="month">Месяц</label>
+                        <select id="month" name="month" required>
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
+                            <option value="5">Май</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="year">Год</label>
+                        <select id="year" name="year" required>
+                            {% for year in range(2024, 2020, -1) %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="filter-btn">Поиск</button>
+                    <button type="reset" class="filter-btn reset">Сбросить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

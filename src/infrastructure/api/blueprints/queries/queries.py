@@ -27,7 +27,7 @@ def customer_form():
     return render_template("customer_form.html")
 
 
-@query_blueprint.route("customers", methods=["GET"])
+@query_blueprint.route("/customers", methods=["GET"])
 @auth_required
 @role_required("analyst")
 @inject
@@ -37,5 +37,24 @@ def customer_query(query_service: QueryService = Provide[Container.query_service
     module_logger.info(year)
     module_logger.info(month)
     result = query_service.get_customers(year, month)
-    return render_template("customer_query.html", tenants=result)
+    return render_template("customer_query.html", tenants=result, year=year, month=month)
  
+
+@query_blueprint.route("/billboard-form", methods=["GET"])
+@auth_required
+@role_required("analyst")
+def tenant_form():
+    return render_template("billboard_form.html")
+
+@query_blueprint.route("/billboards", methods=["GET"])
+@auth_required
+@role_required("analyst")
+@inject
+def billboard_query(query_service: QueryService = Provide[Container.query_service]):
+    month = request.args.get("month", type=int)
+    year = request.args.get("year", type=int)
+    lastname = request.args.get("lastname")
+    
+    result = query_service.get_billboards(year, month, lastname)
+    module_logger.info(result)
+    return render_template("billboard_query.html", tenant_lastname = lastname, month=month, year=year, billboards=result)

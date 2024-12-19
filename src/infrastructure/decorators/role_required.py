@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import session, abort
 
-#TODO переделать декоратор
+
 def role_required(role):
     def decorator(func):
         @wraps(func)

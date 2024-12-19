@@ -41,7 +41,7 @@ class UserRepository:
                 else:
                     raise Exception("Unknown user role")
                 
-    def get_many(self, query: str) -> List[BaseUser]:
+    def get_many(self, query: str, validate = True) -> List[BaseUser]:
         with MysqlContextManager(self.config_dict) as cur:
             if cur is None:
                 raise Exception("Could not connect to a database")
@@ -52,6 +52,9 @@ class UserRepository:
                 user_list: List[BaseUser] = []
                 for user in result:
                     res_dict =  dict([(item[0], user[i]) for i, item in enumerate(cur.description)])
+                    if not validate:
+                        user_list.append(res_dict)
+                        continue
                     role = res_dict["role"]
                     module_logger.info(res_dict)
                     if role == "customer":

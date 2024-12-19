@@ -33,11 +33,10 @@
                    <td>{{ "{:,.2f}".format(tenant.total_sum) }} ₽</td>
                    <td>
                        <div class="billboard-list">
-                           {% for billboard in tenant.billboards %}
-                           <div class="billboard-item">
-                               #{{ billboard.id }} ({{ billboard.city }}, {{ billboard.addres }})
-                           </div>
-                           {% endfor %}
+                            {% for billboard in tenant.billboards.split(";") %}
+                            <div class="billboard-item">{{ billboard }}</div>
+                            {% endfor %}
+                            
                        </div>
                    </td>
                </tr>

@@ -23,3 +23,4 @@ class OrderService:
             order_line_query_list.append(order_line_query)
 
         self.order_repository.add_order_lines(order_line_query_list)
+        return order_id

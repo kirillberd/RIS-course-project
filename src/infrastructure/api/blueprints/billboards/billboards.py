@@ -224,8 +224,9 @@ def order_submit_handler(order_service: OrderService = Provide[Container.order_s
         )
         order_lines.append(order_line)
     
-    order_service.make_order(order, order_lines)
+    order_id = order_service.make_order(order, order_lines)
     user_id = str(session.get("id"))
     session["cart"][user_id] = []
     session.modified = True
-    return render_template("order_form.html", message="Заказ создан")
+    module_logger.info(order_id)
+    return render_template("order_form.html", order_id=order_id)

@@ -8,8 +8,8 @@
    </div>
 
    <h2>Оформление заказа</h2>
-   {% if message %}
-   <div>{{ message }}</div>
+   {% if order_id %}
+   <div> Заказ номер {{ order_id }} создан.</div>
    {% endif %}
    <form action="/billboards/order/submit" method="POST" class="order-form">
        {% for billboard in billboards %}

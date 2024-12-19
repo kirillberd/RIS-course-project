@@ -2,45 +2,56 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('report_blueprint.static', filename='report.css') }}">
 
+{% set column_names = {
+    'billboard_id': 'ID билборда',
+    'city': 'Город',
+    'monthly_cost': 'Стоимость в месяц',
+    'total_revenue': 'Выручка',
+    'rental_count': 'Количество аренд'
+} %}
+
 <div class="report-container">
-   <div class="header-actions">
-       <a href="/reports" class="back-button">← Вернуться к отчетам</a>
-   </div>
+    <div class="header-actions">
+        <a href="/reports" class="back-button">← Вернуться к отчетам</a>
+    </div>
 
-   <h2>Отчет за {{ month }}.{{ year }}</h2>
+    <h2>Отчет за {{ month }}.{{ year }}</h2>
 
-   {% if report_data %}
-   <div class="table-container">
-       <table class="report-table">
-           <thead>
-               <tr>
-                   {% for key in report_data[0].keys() %}
-                   <th>{{ key }}</th>
-                   {% endfor %}
-               </tr>
-           </thead>
-           <tbody>
-               {% for row in report_data %}
-               <tr>
-                   {% for value in row.values() %}
-                   <td>
-                       {% if value is number %}
-                           {{ "{:,.2f}".format(value) if value % 1 != 0 else value }}
-                       {% else %}
-                           {{ value }}
-                       {% endif %}
-                   </td>
-                   {% endfor %}
-               </tr>
-               {% endfor %}
-           </tbody>
-       </table>
-   </div>
-   {% else %}
-   <div class="no-data">
-       <p>Данные отчета отсутствуют</p>
-   </div>
-   {% endif %}
+    {% if report_data %}
+    <div class="table-container">
+        <table class="report-table">
+            <thead>
+                <tr>
+                    {% for key in report_data[0].keys() %}
+                        {% if key not in ['report_year', 'report_month'] %}
+                            <th>{{ column_names[key] }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in report_data %}
+                <tr>
+                    {% for key, value in row.items() %}
+                        {% if key not in ['report_year', 'report_month'] %}
+                            <td>
+                                {% if key in ['monthly_cost', 'total_revenue'] %}
+                                    {{ "{:,.2f}".format(value) }} ₽
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-data">
+        <p>Данные отчета отсутствуют</p>
+    </div>
+    {% endif %}
 </div>
-
 {% endblock %}

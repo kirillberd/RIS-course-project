@@ -17,7 +17,8 @@ class ReportService:
             "check_query_name": "check_bilboard_rent_report.sql",
             "procedure_name": "generate_billboard_stats_report",
             "report_table": "billboard_report",
-            "query_name": "get_billboard_rent_report.sql"
+            "query_name": "get_billboard_rent_report.sql",
+            "translation": "Отчет по аренде билбордов"
         }
     }
 

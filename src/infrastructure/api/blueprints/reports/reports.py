@@ -12,12 +12,20 @@ report_bluerpint = Blueprint(
     "report_blueprint", __name__, template_folder="templates", static_folder="static"
 )
 
+report_dict = {
+    "billboard_stats" : {
+        "translation": "Отчет по аренде билбордов"
+    }
+}
+
 
 @report_bluerpint.route("/", methods=["GET"])
 @auth_required
 @role_required(role="analyst")
 def report_menu():
-    return render_template("report_menu.html")
+    return render_template("report_menu.html", report_dict=report_dict)
+
+
 
 
 @report_bluerpint.route("/generate", methods=["POST"])
